@@ -1,0 +1,27 @@
+body { font-family:"Segoe UI", Roboto, Arial, sans-serif }
+
+code { color:#d31b1b ; font-weight:bold ; font-size:125% }
+h1 { margin:0 0 0.5em }
+h1 a { text-decoration:none ; color:#b31b1b ! important }
+h1 a:hover { color:#d31b1b ! important }
+
+#search { width:25% ; float:left ; padding:0 1% }
+#q { width:16em }
+.awesomplete { z-index:99999 ; font-family: Arial ; font-size:80% }
+.awesomplete > ul { transition:none ; background:rgba(255,255,255,1) }
+.awesomplete input { width:20em }
+.awesomplete mark { background:none ! important ; font-weight:bold }
+
+#results a { text-decoration:none ; color:#008 }
+#results a:hover, #results a:focus { text-decoration:underline ; color:#00c }
+
+#map { height:95% ; width:40% }
+
+#info { width:31% ; padding:0 1% ; float:right }
+#info > h2 { margin:0 ; background:#ff0 ; text-align:center }
+#info th { width:6em ; text-align:right ; color:#aaa ; vertical-align:top ; padding:3px }
+#info td { padding:3px }
+#info ul { margin:0 ; padding:0 ; list-style-type:none }
+#info ul li { margin:0 }
+#info img { height:48px ; vertical-align:middle }
+

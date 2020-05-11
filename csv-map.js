@@ -182,15 +182,13 @@ function show_info(layer) {
     if (value === null || value === '') {
       continue;
     }
-
-    /*
+    
     // add icon to category
     if (property=='category') {
       value = '<img src="image/esl.svg" /> ' +
         '<img src="image/career-education.svg" /> ' + value;
     }
-    */
-
+    
     // linkify things that look like links
     if (typeof(value)=='string' && value.startsWith('http')) {
       value = value.replace(/(?!")(http\S+)/g, '<a href="$1">$1</a>');

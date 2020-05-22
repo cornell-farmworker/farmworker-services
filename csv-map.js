@@ -2,7 +2,8 @@
 
 var csvmap_config = {
   title: 'Farmworker Services',
-  file: 'farmworkers-data.csv',
+  //file: 'farmworkers-data.csv',
+  file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1785004179&single=true&output=csv',
   name_field: 'organization',
   lon_field: 'longitude',
   lat_field: 'latitude',

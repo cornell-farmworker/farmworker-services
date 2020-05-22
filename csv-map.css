@@ -18,10 +18,10 @@ h1 a:hover { color:#d31b1b ! important }
 #map { height:95% ; width:40% }
 
 #info { width:31% ; padding:0 1% ; float:right }
-#info > h2 { margin:0 ; background:#ff0 ; text-align:center }
+#info > h2 { margin:0 ; text-align:left }
 #info th { width:6em ; text-align:right ; color:#aaa ; vertical-align:top ; padding:3px }
 #info td { padding:3px }
 #info ul { margin:0 ; padding:0 ; list-style-type:none }
 #info ul li { margin:0 }
-#info img { height:48px ; vertical-align:middle }
+#info img { height:32px ; vertical-align:middle }
 

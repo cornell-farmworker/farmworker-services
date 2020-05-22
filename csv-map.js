@@ -1,13 +1,17 @@
 'use strict';
 
-var csvFile = 'farmworkers-data.csv';
-var csvNameField = 'organization';
-var autocomplete_fields = [ 'category', 'subcategory', 'organization' ];
-
-var csvOptions = {
-  lonfield: 'longitude',
-  latfield: 'latitude',
-  delimiter: ','
+var csvmap_config = {
+  title: 'Farmworker Services',
+  file: 'farmworkers-data.csv',
+  name_field: 'organization',
+  lon_field: 'longitude',
+  lat_field: 'latitude',
+  multivalue_fields: [ 'category', 'subcategory' ],
+  url_fields: [ 'website' ],
+  email_fields: [ 'email' ],
+  autocomplete_fields: [ 'category', 'subcategory', 'organization' ],
+  hidden_fields: [ 'id', 'internal-note', 'notes', 'amy-notes' ],
+  seen: {}
 }
 
 document.getElementById('home').onclick = home;
@@ -53,33 +57,69 @@ var customLayer = L.geoJson(null, {
   },
   onEachFeature: function(feature, layer) {
     // calculate fulltext for searching
-    var f = ' ';
+    var fulltext = ' ';
     for (var p in feature.properties) {
       var v = feature.properties[p];
-      // put space between multivalues
-      if (v && typeof(v)==="object") {
-        v = v.join(' ');
+
+      // make sure url fields start with http
+      if (csvmap_config.url_fields.indexOf(p) > -1) {
+        if (v.length>0 && ! v.match(/^(https?|ftp):\/\//)) {
+          v = 'http://' + v;
+          feature.properties[p] = v;
+        }
       }
-      f += v + ' ';
+
+      fulltext += v + ' ';
+
+      // split multivalue fields by semicolon
+      if (csvmap_config.multivalue_fields.indexOf(p) > -1) {
+        v = v.split(/;\s*/);
+        var v2 = [];
+        for (var vi=0; vi<v.length; vi++) {
+          var v2v = v[vi].trim();
+          if (v2v.length>0) {
+            v2.push(v2v);
+            /*
+            if (p=='subcategory') {
+              if (csvmap_config.seen[v2v]) {
+                csvmap_config.seen[v2v]++;
+              }
+              else {
+                csvmap_config.seen[v2v] = 1;
+              }
+            }
+            */
+          }
+        }
+        if (v2.length>0) {
+          feature.properties[p] = v2;
+        }
+      }
+
+
     }
-    feature.properties.fulltext = f;
-    layer.bindTooltip(feature.properties[csvNameField], {direction:'right'});
+    feature.properties._fulltext = fulltext;
+    layer.bindTooltip(feature.properties[csvmap_config.name_field], {direction:'right'});
     layer.on('click', function(e){ show_info(e.target); });
   }
 });
 
-
-var points = omnivore.csv(csvFile, csvOptions, customLayer)
+var csvOptions = {
+  lonfield: csvmap_config.lon_field,
+  latfield: csvmap_config.lat_field,
+  delimiter: ','
+}
+var points = omnivore.csv(csvmap_config.file, csvOptions, customLayer)
   .on('ready', function(err, data) {
     // once we have all the data...
     var layers = this.getLayers();
-    console.log('loaded ' + layers.length + ' points from ' + csvFile);
+    console.log('loaded ' + layers.length + ' points from ' + csvmap_config.file);
     initAutocomplete(layers);
     search(''); // interpretHash won't display points unless we start by searching for everything
     interpretHash();
   })
   .on('error', function(x) {
-    console.log('error parsing '+csvFile);
+    console.log('error parsing '+csvmap_config.file);
     console.log(x);
   })
   .addTo(map);
@@ -97,12 +137,21 @@ function initAutocomplete(layers) {
   // autocomplete for the search box
   var autocomplete_terms = [];
   for (var j=0; j<layers.length; j++) {
-    for (var fj=0; fj<autocomplete_fields.length; fj++) {
-      var field = autocomplete_fields[fj];
+    for (var fj=0; fj<csvmap_config.autocomplete_fields.length; fj++) {
+      var field = csvmap_config.autocomplete_fields[fj];
       var val = layers[j].feature.properties[field];
-      // TODO split by ;
-      if (autocomplete_terms.indexOf(val) < 0) {
-        autocomplete_terms.push(val);
+      if (Array.isArray(val)) {
+        for (var ai=0; ai<val.length; ai++) {
+          var vi = val[ai];
+          if (autocomplete_terms.indexOf(vi) < 0) {
+            autocomplete_terms.push(vi);
+          }
+        }
+      }
+      else {
+        if (autocomplete_terms.indexOf(val) < 0) {
+          autocomplete_terms.push(val);
+        }
       }
     }
   }
@@ -166,36 +215,65 @@ function show_info(layer) {
   // TODO use mustache templates?
   clear_info();
   var p = layer.feature.properties;
-  var html = '<h2>' + p[csvNameField] + '</h2>';
+  console.log(p);
+  var html = '<h2>' + p[csvmap_config.name_field] + '</h2>';
   html += '<table>';
   for (var i in Object.keys(p)) {
     var property = Object.keys(p)[i];
 
-    // don't show these fields
-    // TODO
-    if (['id','name','fulltext'].indexOf(property) > -1) {
+    var hidden = csvmap_config.hidden_fields.slice();
+
+    // hide the name field, since it is displayed above
+    hidden.push(csvmap_config.name_field);
+
+    // hide the internal _fulltext field
+    hidden.push('_fulltext');
+
+    // don't show hidden fields
+    if (hidden.indexOf(property) > -1) {
       continue;
     }
-    var value = p[property];
+
+    var value = p[property].slice();
 
     // don't list null or blank properties
     if (value === null || value === '') {
       continue;
     }
-    
+
     // add icon to category
+    // TODO make this a separate function, so it can be reused for list of all categories
     if (property=='category') {
-      value = '<img src="image/esl.svg" /> ' +
-        '<img src="image/career-education.svg" /> ' + value;
-    }
-    
-    // linkify things that look like links
-    if (typeof(value)=='string' && value.startsWith('http')) {
-      value = value.replace(/(?!")(http\S+)/g, '<a href="$1">$1</a>');
+      for (var vi=0; vi<value.length; vi++) {
+        var v = value[vi];
+        var icon = 'Category_' + v.replace(/\s/g, '_') + '.svg';
+        v = '<img src="image/icons/'+ icon + '" /> ' + v;
+        value[vi] = v;
+      }
     }
 
-    // use html list for software values
-    if (property=='software' && value.length>0) {
+    if (property=='subcategory') {
+      for (var vi=0; vi<value.length; vi++) {
+        var v = value[vi];
+        var icon = 'Subcategory_' + v.replace(/\s/g, '_') + '.svg';
+        v = '<img src="image/icons/'+ icon + '" /> ' + v;
+        value[vi] = v;
+      }
+    }
+
+    // linkify url fields
+    if (csvmap_config.url_fields.indexOf(property) > -1 && typeof(value)=='string') {
+      // watch out! there might be multiple urls or non-url text
+      value = value.replace(/(?!")((http|ftp)\S+)/g, '<a href="$1">$1</a>');
+    }
+
+    // linkify email fields
+    if (csvmap_config.email_fields.indexOf(property) > -1 && typeof(value)=='string') {
+      value = '<a href="mailto:' + value + '">' + value + '</a>';
+    }
+
+    // use html lists for multivalues
+    if (typeof(value)=='object' && value.length>0) {
       value = '<ul><li>' + value.join('</li><li>') + '</li></ul>';
     }
 
@@ -203,8 +281,8 @@ function show_info(layer) {
   }
   html += '</table>';
   document.getElementById('info').innerHTML = html;
-  // TODO
-  document.title = 'Farmworker Services: ' + p[csvNameField];
+  window.scrollTo(0,0);
+  document.title = csvmap_config.title + ': ' + p[csvmap_config.name_field];
 
   // highlight this marker
   layer.bringToFront().setStyle({fillColor:'#ff0', color:'#000', radius:12});
@@ -241,7 +319,7 @@ function submitSearch(e) {
   e.returnValue = '';
   var q = document.getElementById('q').value.trim();
   location.hash = '/' + encodeHash(q);
-  document.title = 'Cornell Software Map: ' + q;
+  document.title = csvmap_config.title + ': ' + q;
   search(q);
   return false;
 }
@@ -263,8 +341,8 @@ function search(q, showid) {
   // sort layers by name
   var layers = points.getLayers();
   layers.sort(function(a,b){
-    var aa = a.feature.properties[csvNameField].toLowerCase();
-    var bb = b.feature.properties[csvNameField].toLowerCase();
+    var aa = a.feature.properties[csvmap_config.name_field].toLowerCase();
+    var bb = b.feature.properties[csvmap_config.name_field].toLowerCase();
     if (aa<bb) return -1;
     if (aa>bb) return 1;
     return 0;
@@ -279,7 +357,7 @@ function search(q, showid) {
   var bounds = L.latLngBounds();
   for (var i=0; i<layers.length; i++) {
     var item = layers[i];
-    if (item.feature.properties.fulltext.match(re)) {
+    if (item.feature.properties._fulltext.match(re)) {
       lastMatch = item;
       item.addTo(map);
 
@@ -290,7 +368,7 @@ function search(q, showid) {
       }
 
       var id = item.feature.properties.id;
-      var name = item.feature.properties[csvNameField];
+      var name = item.feature.properties[csvmap_config.name_field];
       var li = document.createElement('li');
       li.innerHTML = '<a href="#/' + encodeHash(q) + '/' + encodeHash(id) + '">'+name+'</a>';
       var a = li.firstChild;

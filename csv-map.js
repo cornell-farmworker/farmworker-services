@@ -7,14 +7,7 @@ var csvmap = {
     categories_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1927915399&single=true&output=csv',
     //categories_file: 'categories.csv',
 
-    // local file
-    //file: 'farmworkers-data.csv',
-
-    // english
-    file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1785004179&single=true&output=csv',
-
-    // spanish
-    //file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1985522431&single=true&output=csv',
+    data_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1785004179&single=true&output=csv',
 
     name_field: 'organization',
     lon_field: 'longitude',
@@ -23,12 +16,50 @@ var csvmap = {
     url_fields: [ 'website' ],
     email_fields: [ 'contact' ],
     autocomplete_fields: [ 'category', 'subcategory', 'organization' ],
-    hidden_fields: [ 'id', 'internal-note', 'notes', 'amy-notes' ],
-    seen: {}
+    hidden_fields: [ 'id', 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
+    seen: {},
+    labels: {
+      'en': {
+        'test': 'testtest'
+      },
+      'es': {
+        'county': 'Condado',
+        'category': 'Servicios',
+        'subcategory': 'Subcategoría de servicios',
+        'organization': 'Organización',
+        'address': 'Dirección 1',
+        'address2': 'Address 2',
+        'pobox': 'Apartado',
+        'city': 'Ciudad',
+        'state': 'Estado',
+        'zipcode': 'Codigo postal',
+        'longitude': 'longitude',
+        'latitude': 'latitude',
+        'phone': 'Teléfono',
+        'fax': 'Fax',
+        'electronic contact': 'Correo electronico',
+        'website': 'Sitio web',
+        'hours': 'Horrario',
+        'transportation': 'Transportación disponible?',
+        'translation': 'Interpretación disponible?',
+        'bilingual': 'Bilingüe',
+        'documents': 'Documentos',
+        'citizenship': 'Ciudadanía',
+        'cost': 'Costos',
+        'notes': 'Apuntos'
+      }
+    }
   }
 }
 
-// SPANISH COLUMN LABELS: id,LONG NAME OF COLUMNS ,Condado,Servicios,Subcategoría de servicios,Organización,Dirección 1,Address 2,Apartado,Ciudad,Estado,Codigo postal,longitude,latitude,Teléfono,Fax,Correo electronico,Sitio web,Horrario,Transportación disponible?,Interpretación disponible?,Bilingüe,Documentos,Ciudadanía,Costos,Apuntos
+csvmap.lang = lang;
+
+if (lang=='es') {
+  // espanol
+  csvmap.config.data_file = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1985522431&single=true&output=csv';
+}
+
+
 
 document.getElementById('home').onclick = home;
 document.getElementById('searchform').onsubmit = submitSearch;
@@ -101,6 +132,8 @@ var customLayer = L.geoJson(null, {
           var v2v = v[vi].trim();
           if (v2v.length>0) {
             v2.push(v2v);
+
+            // check for invalid categories/subcategories (en or es)
             if (p=='category') {
               if (csvmap.categories.indexOf(v2v)===-1) {
                 console.log('Invalid category: '+v2v);
@@ -133,17 +166,17 @@ var csvOptions = {
 }
 
 function loadPoints() {
-  window.points = omnivore.csv(csvmap.config.file, csvOptions, customLayer)
+  window.points = omnivore.csv(csvmap.config.data_file, csvOptions, customLayer)
     .on('ready', function(err, data) {
       // once we have all the data...
       var layers = this.getLayers();
-      //console.log('loaded ' + layers.length + ' points from ' + csvmap.config.file);
+      //console.log('loaded ' + layers.length + ' points from ' + csvmap.config.data_file);
       initAutocomplete(layers);
       search(''); // interpretHash won't display points unless we start by searching for everything
       interpretHash();
     })
     .on('error', function(x) {
-      console.log('error parsing '+csvmap.config.file);
+      console.log('error parsing '+csvmap.config.data_file);
       console.log(x);
     })
     .addTo(map);
@@ -156,11 +189,14 @@ function gotCategories(results) {
   var tree = {};
   var categories = [];
   var subcategories = [];
+  csvmap.icon = {}; // to hold icon filenames for each category/subcategory
   for (var i=0; i<langs.length; i++) {
     tree[langs[i]] = {};
   }
   for (var i=0; i<data.length; i++) {
     var row = data[i];
+
+    // build category tree for each language
     for (var li=0; li<langs.length; li++) {
       var lang = langs[li];
       var cat = row['category-' + lang];
@@ -174,6 +210,19 @@ function gotCategories(results) {
         tree[lang][cat].push(sub);
       }
     }
+
+    // build category icon index
+    var cat_en = row['category-en'];
+    var cat_es = row['category-es'];
+    var icon = 'image/icons/' + cat_en.replace(/\W+/g, '-').toLowerCase() + '.svg';
+    csvmap.icon[cat_en] = icon;
+    csvmap.icon[cat_es] = icon;
+
+    var subcat_en = row['subcategory-en'];
+    var subcat_es = row['subcategory-es'];
+    var icon = 'image/icons/' + subcat_en.replace(/\W+/g, '-').toLowerCase() + '.svg';
+    csvmap.icon[subcat_en] = icon;
+    csvmap.icon[subcat_es] = icon;
   }
   csvmap.categoryTree = tree;
   csvmap.categories = categories;
@@ -299,7 +348,7 @@ function show_info(layer) {
     if (property=='category' || property=='subcategory') {
       for (var vi=0; vi<value.length; vi++) {
         var v = value[vi];
-        value[vi] = icon(v) + ' ' + v;
+        value[vi] = '<img src="' + csvmap.icon[v] + '" /> ' + v;
       }
     }
 
@@ -319,7 +368,12 @@ function show_info(layer) {
       value = '<ul><li>' + value.join('</li><li>') + '</li></ul>';
     }
 
-    html += '<tr><th>'+property+':</th><td>' + value + '</td></tr>';
+    // check for property label
+    var label = csvmap.config.labels[csvmap.lang][property];
+    if (! label) {
+      label = property;
+    }
+    html += '<tr><th>'+label+':</th><td>' + value + '</td></tr>';
   }
   html += '</table>';
   document.getElementById('info').innerHTML = html;

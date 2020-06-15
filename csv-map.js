@@ -15,7 +15,7 @@ var csvmap = {
     multivalue_fields: [ 'category', 'subcategory' ],
     url_fields: [ 'website' ],
     email_fields: [ 'contact' ],
-    autocomplete_fields: [ 'category', 'subcategory', 'organization' ],
+    autocomplete_fields: [ 'category', 'subcategory', 'city', 'organization' ],
     hidden_fields: [ 'id', 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
     seen: {},
     labels: {

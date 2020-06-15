@@ -60,8 +60,8 @@ if (lang=='es') {
 }
 
 
-
-document.getElementById('home').onclick = home;
+window.addEventListener('hashchange', interpretHash, false);
+//document.getElementById('home').onclick = home;
 document.getElementById('searchform').onsubmit = submitSearch;
 document.onkeyup = function(e) {
   if (e.key=='Escape') {
@@ -172,7 +172,7 @@ function loadPoints() {
       var layers = this.getLayers();
       //console.log('loaded ' + layers.length + ' points from ' + csvmap.config.data_file);
       initAutocomplete(layers);
-      search(''); // interpretHash won't display points unless we start by searching for everything
+      //search(''); // interpretHash won't display points unless we start by searching for everything
       interpretHash();
     })
     .on('error', function(x) {
@@ -301,10 +301,15 @@ function interpretHash() {
   var params = hash.split("/");
   var q = params[1];
   var id = params[2];
+  console.log('interpretHash: ' + q + ', ' + id);
 
-  if (q === undefined) {
+  if (q === undefined || q === '') {
     q = '';
     id = hash.split('/')[2];
+    if (id === undefined) {
+      home();
+      return false;
+    }
   }
 
   document.title += ': ' + q + ' / ' + id;
@@ -392,6 +397,9 @@ function icon(category) {
   return img;
 }
 
+function clearHome() {
+  document.getElementById('home').innerHTML = '';
+}
 
 function clearInfo() {
   document.getElementById('info').innerHTML = '';
@@ -399,6 +407,10 @@ function clearInfo() {
   window.points.eachLayer(function(el){
     window.points.resetStyle(el);
   });
+}
+
+function clearResults() {
+  document.getElementById('results').innerHTML = '';
 }
 
 function encodeHash(h) {
@@ -415,7 +427,28 @@ function encodeHash(h) {
 
 function home() {
   location.hash = '/';
-  interpretHash();
+  var tree = csvmap.categoryTree[csvmap.lang];
+  search('');
+  clearInfo();
+  clearResults();
+  clearHome();
+  var ul = document.createElement('ul');
+  for (var cat in tree) {
+    var li = document.createElement('li');
+    var img = '<img src="' + csvmap.icon[cat] + '" /> ';
+    li.innerHTML = '<a href="#/' + encodeHash(cat) + '">' + img + cat + '</a>';
+    ul.appendChild(li);
+    var ul2 = document.createElement('ul');
+    for (var i=0; i<tree[cat].length; i++) {
+      var sub = tree[cat][i];
+      var subli = document.createElement('li');
+      subli.innerHTML = '<a href="#/' + encodeHash(sub) + '">' + sub + '</a>';
+      ul2.appendChild(subli);
+    }
+    ul.appendChild(ul2);
+  }
+  document.getElementById('home').append(ul);
+  console.log('done');
 }
 
 function submitSearch(e) {
@@ -456,6 +489,7 @@ function search(q, showid) {
   var results = document.getElementById('results');
   results.innerHTML = '';
   clearInfo();
+  clearHome();
 
   var lastMatch = null;
   var bounds = L.latLngBounds();

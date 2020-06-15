@@ -17,6 +17,7 @@ var csvmap = {
     email_fields: [ 'contact' ],
     autocomplete_fields: [ 'category', 'subcategory', 'city', 'county', 'organization' ],
     hidden_fields: [ 'id', 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
+    unsearched_fields: [ 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
     seen: {},
     labels: {
       'en': {
@@ -122,7 +123,10 @@ var customLayer = L.geoJson(null, {
         }
       }
 
-      fulltext += v + ' ';
+      // add value to fulltext unless it is an unsearched field
+      if (csvmap.config.unsearched_fields.indexOf(p) == -1) {
+        fulltext += v + ' ';
+      }
 
       // split multivalue fields by semicolon
       if (csvmap.config.multivalue_fields.indexOf(p) > -1) {

@@ -123,6 +123,12 @@ var customLayer = L.geoJson(null, {
         }
       }
 
+      // add "County" to county names
+      if (p == 'county') {
+        v += ' County';
+        feature.properties[p] = v;;
+      }
+
       // add value to fulltext unless it is an unsearched field
       if (csvmap.config.unsearched_fields.indexOf(p) == -1) {
         fulltext += v + ' ';

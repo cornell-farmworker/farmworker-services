@@ -1,0 +1,57 @@
+a { text-decoration:none ; color:#00c}
+a:hover, a:active { text-decoration:underline }
+body { font-family:"Segoe UI", Roboto, Arial, sans-serif ; margin:0 }
+
+h1 { margin:0 0 0.5em ; font-size:100% ; font-weight:bold ; background:#b31b1b ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
+h1 a { text-decoration:none ; color:#fff ! important }
+h1 a:hover { xcolor:#f88 ! important }
+
+#search { width:25% ; float:left ; padding:0 1% }
+#q { width:16em }
+.awesomplete { z-index:99999 ; font-family: Arial ; font-size:80% }
+.awesomplete > ul { transition:none ; background:rgba(255,255,255,1) }
+.awesomplete input { width:20em }
+.awesomplete mark { background:none ! important ; font-weight:bold }
+
+#home > ul > li { font-weight:bold ; list-style-type:none }
+#home > ul > ul { font-weight:normal ; margin-left:2em }
+#home a { color:#008 }
+#home img { height:32px ; vertical-align:middle }
+
+
+#results a { text-decoration:none ; color:#008 }
+#results a:hover, #results a:focus { text-decoration:underline ; color:#00c }
+#results.home { list-style-type:none }
+
+#map { height:95% ; width:40% }
+
+#info { width:31% ; padding:0 1% ; float:right }
+#info > h2 { margin:0 ; text-align:left ; font-size:100% ; font-weight:bold }
+#info dl { display:grid ; grid-template-columns: 8em auto }
+#info dt { grid-column-start:1 ; color:#aaa ; text-align:right ; vertical-align:top ; margin:2px 0 0 }
+#info dt:after { content:': ' ; margin-right:0.5em }
+#info dd { grid-column-start:2 ; margin:2px 0 0 }
+#info ul { margin:0 ; padding:0 ; list-style-type:none }
+#info ul li { margin:0 }
+#info img { height:32px ; vertical-align:middle }
+
+
+
+
+
+/* Below are styles for mobile devices and other small screens */
+
+@media screen and (max-width:800px) {
+
+#search { width:100% ; float:none }
+
+#home ul { list-style-type:none ; width:100% ; margin-left:0 ; padding-left:0 }
+#home li { border-top:2px solid #fff }
+#home > ul > li { width:100% ; background:#ddd }
+#home > ul > ul > li { padding-left:2em }
+
+#map { height:320px ; width:100% ; clear:both }
+
+#info { width:100% ; float:none ; clear:both }
+
+}

@@ -1,66 +1,5 @@
 'use strict';
 
-var csvmap = {
-  config: {
-    title: 'Farmworker Services',
-
-    categories_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1927915399&single=true&output=csv',
-    //categories_file: 'categories.csv',
-
-    data_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1785004179&single=true&output=csv',
-
-    name_field: 'organization',
-    lon_field: 'longitude',
-    lat_field: 'latitude',
-    multivalue_fields: [ 'category', 'subcategory' ],
-    url_fields: [ 'website' ],
-    email_fields: [ 'contact' ],
-    autocomplete_fields: [ 'category', 'subcategory', 'city', 'county', 'organization' ],
-    hidden_fields: [ 'id', 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
-    unsearched_fields: [ 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
-    seen: {},
-    labels: {
-      'en': {
-        'test': 'testtest'
-      },
-      'es': {
-        'county': 'Condado',
-        'category': 'Servicios',
-        'subcategory': 'Subcategoría de servicios',
-        'organization': 'Organización',
-        'address': 'Dirección 1',
-        'address2': 'Address 2',
-        'pobox': 'Apartado',
-        'city': 'Ciudad',
-        'state': 'Estado',
-        'zipcode': 'Codigo postal',
-        'longitude': 'longitude',
-        'latitude': 'latitude',
-        'phone': 'Teléfono',
-        'fax': 'Fax',
-        'electronic contact': 'Correo electronico',
-        'website': 'Sitio web',
-        'hours': 'Horrario',
-        'transportation': 'Transportación disponible?',
-        'translation': 'Interpretación disponible?',
-        'bilingual': 'Bilingüe',
-        'documents': 'Documentos',
-        'citizenship': 'Ciudadanía',
-        'cost': 'Costos',
-        'notes': 'Apuntos'
-      }
-    }
-  }
-}
-
-csvmap.lang = lang;
-
-if (lang=='es') {
-  // espanol
-  csvmap.config.data_file = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1985522431&single=true&output=csv';
-}
-
-
 window.addEventListener('hashchange', interpretHash, false);
 //document.getElementById('home').onclick = home;
 document.getElementById('searchform').onsubmit = submitSearch;
@@ -116,15 +55,15 @@ var customLayer = L.geoJson(null, {
       var v = feature.properties[p];
 
       // make sure url fields start with http
-      if (csvmap.config.url_fields.indexOf(p) > -1) {
-        if (v.length>0 && ! v.match(/^(https?|ftp):\/\//)) {
+      if (csvmap.config.linked_fields.indexOf(p) > -1) {
+        if (v.length>0 && ! v.match(/@/) && ! v.match(/^(https?|ftp):\/\//)) {
           v = 'http://' + v;
           feature.properties[p] = v;
         }
       }
 
       // add "County" to county names
-      if (p == 'county') {
+      if (p == 'county' && v) {
         v += ' County';
         feature.properties[p] = v;;
       }
@@ -334,48 +273,36 @@ function show_info(layer) {
   // TODO use mustache templates?
   clearInfo();
   var p = layer.feature.properties;
-  var html = '<h2>' + p[csvmap.config.name_field] + '</h2>';
-  html += '<table>';
+  var m = {};
+
+  // prepare selected properties before insertion into Mustache template
   for (var i in Object.keys(p)) {
     var property = Object.keys(p)[i];
 
-    var hidden = csvmap.config.hidden_fields.slice();
-
-    // hide the name field, since it is displayed above
-    hidden.push(csvmap.config.name_field);
-
-    // hide the internal _fulltext field
-    hidden.push('_fulltext');
-
-    // don't show hidden fields
-    if (hidden.indexOf(property) > -1) {
-      continue;
-    }
-
+    // copy of value(s)
     var value = p[property].slice();
 
-    // don't list null or blank properties
-    if (value === null || value === '') {
-      continue;
-    }
-
-    // add icon to category
+    // add icon to category, and make into a link
     if (property=='category' || property=='subcategory') {
       for (var vi=0; vi<value.length; vi++) {
         var v = value[vi];
-        value[vi] = '<img src="' + csvmap.icon[v] + '" /> ' + v;
+        value[vi] = '<a href="#/'+v+'"><img src="' + csvmap.icon[v] + '" /> ' + v + '</a>';
       }
     }
 
-    // linkify url fields
-    if (csvmap.config.url_fields.indexOf(property) > -1 && typeof(value)=='string') {
-      // watch out! there might be multiple urls or non-url text
-      value = value.replace(/(?!")((http|ftp)\S+)/g, '<a href="$1">$1</a>');
-    }
-
-    // linkify email fields
-    if (csvmap.config.email_fields.indexOf(property) > -1 && typeof(value)=='string' && value.indexOf('@')>-1) {
-      value = '<a href="mailto:' + value + '">' + value + '</a>';
+    // linkify linked fields
+    if ((csvmap.config.linked_fields.indexOf(property) > -1) && value.length>0) {
+      for (var vi=0; vi<value.length; vi++) {
+        var v = value[vi];
+        if (v.indexOf('@') > -1) {
+          v = v.replace(/(\S+@\S+)/g, '<a href="mailto:$1" target="_blank">$1</a>');
+        }
+        else {
+          // watch out! there might be multiple urls or non-url text
+          v = v.replace(/(?!")((http|ftp)\S+)/g, '<a href="$1" target="_blank">$1</a>');
+        }
+        value[vi] = v;
+      }
     }
 
     // use html lists for multivalues
@@ -383,16 +310,16 @@ function show_info(layer) {
       value = '<ul><li>' + value.join('</li><li>') + '</li></ul>';
     }
 
-    // check for property label
-    var label = csvmap.config.labels[csvmap.lang][property];
-    if (! label) {
-      label = property;
-    }
-    html += '<tr><th>'+label+':</th><td>' + value + '</td></tr>';
+    m[property] = value;
+
   }
-  html += '</table>';
+  var html = Mustache.render(csvmap.config.template_en, m);
   document.getElementById('info').innerHTML = html;
+  if (csvmap.mobile()) {
+    document.getElementById('results').style.display = 'none';
+  }
   window.scrollTo(0,0);
+
   document.title = csvmap.config.title + ': ' + p[csvmap.config.name_field];
 
   // highlight this marker
@@ -474,11 +401,6 @@ function submitSearch(e) {
 function search(q, showid) {
   // showid is optional, and will show details for that result
 
-  // special handling for "R"
-  if (q==='r' || q==='R') {
-    q += ' ';
-  }
-
   // replace slashes with space
   q = q.replace(/\//g, '.');
 
@@ -496,10 +418,12 @@ function search(q, showid) {
   });
 
   // reset results
+  document.getElementById('search').style.display = 'block';
   var results = document.getElementById('results');
   results.innerHTML = '';
   clearInfo();
   clearHome();
+  window.scrollTo(0,0);
 
   var lastMatch = null;
   var bounds = L.latLngBounds();

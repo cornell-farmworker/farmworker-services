@@ -2,7 +2,7 @@ a { text-decoration:none ; color:#00c}
 a:hover, a:active { text-decoration:underline }
 body { font-family:"Segoe UI", Roboto, Arial, sans-serif ; margin:0 }
 
-h1 { margin:0 0 0.5em ; font-size:100% ; font-weight:bold ; background:#b31b1b ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
+h1 { margin:0 ; font-size:100% ; font-weight:bold ; background:#b31b1b ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
 h1 a { text-decoration:none ; color:#fff ! important }
 h1 a:hover { xcolor:#f88 ! important }
 
@@ -13,11 +13,10 @@ h1 a:hover { xcolor:#f88 ! important }
 .awesomplete input { width:20em }
 .awesomplete mark { background:none ! important ; font-weight:bold }
 
-#home > ul > li { font-weight:bold ; list-style-type:none }
+#home > ul { font-weight:bold ; list-style-type:none }
 #home > ul > ul { font-weight:normal ; margin-left:2em }
 #home a { color:#008 }
 #home img { height:32px ; vertical-align:middle }
-
 
 #results a { text-decoration:none ; color:#008 }
 #results a:hover, #results a:focus { text-decoration:underline ; color:#00c }
@@ -44,6 +43,10 @@ h1 a:hover { xcolor:#f88 ! important }
 @media screen and (max-width:800px) {
 
 #search { width:100% ; float:none }
+
+#restoreSearch { position:sticky ; top:1.85em }
+#restoreSearch ul { font-weight:bold ; list-style-type:none ; xwidth:100% ; margin:2px 0 ; padding:3px 6px ; background:#831b1b ; color:#fff }
+#restoreSearch li { text-align:right }
 
 #home ul { list-style-type:none ; width:100% ; margin-left:0 ; padding-left:0 }
 #home li { border-top:2px solid #fff }

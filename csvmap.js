@@ -1,7 +1,6 @@
 'use strict';
 
 window.addEventListener('hashchange', interpretHash, false);
-//document.getElementById('home').onclick = home;
 document.getElementById('searchform').onsubmit = submitSearch;
 document.onkeyup = function(e) {
   if (e.key=='Escape') {
@@ -242,7 +241,7 @@ function interpretHash() {
   // automatically search for terms in the URL hash,
   // so that links to specific searches or features can be shared by URL
   var hash = location.hash;
-  //console.log('interpret hash '+hash);
+  console.log('interpret hash '+hash);
 
   // unescape hash
   hash = unescape(hash).replace(/\+/g, ' ');
@@ -250,7 +249,6 @@ function interpretHash() {
   var params = hash.split("/");
   var q = params[1];
   var id = params[2];
-  console.log('interpretHash: ' + q + ', ' + id);
 
   if (q === undefined || q === '') {
     q = '';
@@ -316,7 +314,17 @@ function show_info(layer) {
   var html = Mustache.render(csvmap.config.template_en, m);
   document.getElementById('info').innerHTML = html;
   if (csvmap.mobile()) {
-    document.getElementById('results').style.display = 'none';
+    var s = document.getElementById('search')
+    document.getElementById('search').style.display = 'none';
+    var rs = document.getElementById('restoreSearch');
+    if (rs) {
+      rs.remove();
+    }
+    var d = document.createElement('div');
+    d.id = 'restoreSearch';
+    d.innerHTML = '<ul><li>Return to search results</li></ul>';
+    document.getElementById('title').after(d);
+    document.getElementById('restoreSearch').addEventListener('click', restoreSearch);
   }
   window.scrollTo(0,0);
 
@@ -324,6 +332,11 @@ function show_info(layer) {
 
   // highlight this marker
   layer.bringToFront().setStyle({fillColor:'#ff0', color:'#000', radius:12});
+}
+
+function restoreSearch() {
+  document.getElementById('search').style.display = 'block';
+  document.getElementById('restoreSearch').remove();
 }
 
 
@@ -348,6 +361,10 @@ function clearInfo() {
 
 function clearResults() {
   document.getElementById('results').innerHTML = '';
+  var rs = document.getElementById('restoreSearch');
+  if (rs) {
+    rs.remove();
+  }
 }
 
 function encodeHash(h) {
@@ -420,7 +437,7 @@ function search(q, showid) {
   // reset results
   document.getElementById('search').style.display = 'block';
   var results = document.getElementById('results');
-  results.innerHTML = '';
+  clearResults();
   clearInfo();
   clearHome();
   window.scrollTo(0,0);

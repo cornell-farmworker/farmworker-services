@@ -8,6 +8,19 @@ document.onkeyup = function(e) {
   }
 }
 
+// Try to get user location
+navigator.geolocation.getCurrentPosition(gotLocation, gotLocationError, {enableHighAccuracy:false});
+
+function gotLocation(result) {
+  console.log('got location');
+  console.log(result);
+  csvmap.location = result.coords;
+}
+function gotLocationError(result) {
+  console.log('error getting location');
+  console.log(result);
+}
+
 // fadeAnimation:false is recommended for grayscale tilelayer, otherwise it may flicker
 var map = L.map('map', { fadeAnimation:false });
   //.on('click', function(e) { console.log(e.latlng); })
@@ -241,7 +254,7 @@ function interpretHash() {
   // automatically search for terms in the URL hash,
   // so that links to specific searches or features can be shared by URL
   var hash = location.hash;
-  console.log('interpret hash '+hash);
+  //console.log('interpret hash '+hash);
 
   // unescape hash
   hash = unescape(hash).replace(/\+/g, ' ');
@@ -270,15 +283,19 @@ function show_info(layer) {
   // return info HTML for the layer feature
   // TODO use mustache templates?
   clearInfo();
+
   var p = layer.feature.properties;
-  var m = {};
+  var p2 = {};
 
   // prepare selected properties before insertion into Mustache template
   for (var i in Object.keys(p)) {
     var property = Object.keys(p)[i];
 
     // copy of value(s)
-    var value = p[property].slice();
+    var value = p[property];
+    if (typeof(value) === 'object') {
+      value = value.slice();
+    }
 
     // add icon to category, and make into a link
     if (property=='category' || property=='subcategory') {
@@ -308,10 +325,10 @@ function show_info(layer) {
       value = '<ul><li>' + value.join('</li><li>') + '</li></ul>';
     }
 
-    m[property] = value;
+    p2[property] = value;
 
   }
-  var html = Mustache.render(csvmap.config.template_en, m);
+  var html = Mustache.render(csvmap.config.template_en, p2);
   document.getElementById('info').innerHTML = html;
   if (csvmap.mobile()) {
     var s = document.getElementById('search')
@@ -402,7 +419,6 @@ function home() {
     ul.appendChild(ul2);
   }
   document.getElementById('home').append(ul);
-  console.log('done');
 }
 
 function submitSearch(e) {
@@ -433,6 +449,24 @@ function search(q, showid) {
     if (aa>bb) return 1;
     return 0;
   });
+
+  // sort layers by proximity
+  if (csvmap.location) {
+    // calculation distances from user location
+    // TODO do this when we first load the data?
+    var ruler = new CheapRuler(42.8, 'miles');
+    for (var i=0; i<layers.length; i++) {
+      var dist = ruler.distance(layers[i].feature.geometry.coordinates, [csvmap.location.longitude, csvmap.location.latitude]);
+      layers[i].feature.properties.csvmapdist = dist;
+    }
+    layers.sort(function(a,b){
+      var aa = a.feature.properties.csvmapdist;
+      var bb = b.feature.properties.csvmapdist;
+      if (aa<bb) return -1;
+      if (aa>bb) return 1;
+      return 0;
+    });
+  }
 
   // reset results
   document.getElementById('search').style.display = 'block';

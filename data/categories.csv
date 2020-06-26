@@ -1,0 +1,56 @@
+sort,category-en,subcategory-en,category-es,subcategory-es,icon1,icon2
+1,Legal aid,,Asistencia legal,,noun_legal_2077366.svg,noun_legal_3082155.svg
+1.1,Legal aid,Immigration law,Asistencia legal,"Inmigración (deportación, ciudadanía y regularización)",noun_Immigration_2858010.svg,noun_Immigration_3140877.svg
+1.2,Legal aid,Family law,Asistencia legal,Leyes familiar,noun_Family_642285.svg,noun_Family_686641.svg
+1.3,Legal aid,Labor rights,Asistencia legal,Derechos laborales,noun_Fair Labor Rights_58375.svg,noun_labor_2902727.svg
+1.4,Legal aid,Other law,Asistencia legal,Otros casos legales,noun_Law_1055409.svg,noun_Law_2041951.svg
+2,Emergency assistance,,Asistencia de emergencias,,noun_Care line_438491.svg,noun_emergency call_3157172.svg
+2.1,Emergency assistance,Food,Asistencia de emergencias,Alimentos,noun_Shopping Cart_327624.svg,noun_Food_2483050.svg
+2.2,Emergency assistance,Clothing,Asistencia de emergencias,Ropa,noun_clothing_2207999.svg,noun_clothing_2207999.svg
+2.2,Emergency assistance,Emergency shelter,Asistencia de emergencias,Refugio de emergencia,noun_Shelter_559521.svg,noun_Shelter_24591.svg
+2.3,Emergency assistance,Medicine,Asistencia de emergencias,Medicina,noun_Medicine_3306510.svg,noun_Medicine_3284080.svg
+2.4,Emergency assistance,Other needs,Asistencia de emergencias,Otras necesidades,noun_Shelter_24591.svg,noun_assistance_635295.svg
+3,Health,,Salud,,noun_Health_2377441.svg,noun_Stethoscope_187692.svg
+3.1,Health,General medicine,Salud,Medicina general,noun_Health_2188971.svg,noun_Doctor_167328.svg
+3.2,Health,Women's health,Salud,Salud de la mujer,noun_Nurse_2588386.svg,noun_Pregnancy_1339472.svg
+3.3,Health,Specialty medicine,Salud,Especialistas médicos,noun_Doctor_57600.svg,noun_Doctor_57606.svg
+3.4,Health,Health accessibility,Salud,Acceso a cobertura de salud,noun_medical_3232541.svg,noun_health insurance_1051868.svg
+3.5,Health,Farm visits,Salud,Visitas a fincas,noun_Farm_2723267.svg,noun_medic bag_1578573.svg
+3.6,Health,Dental,Salud,Dental,noun_dental_1945555.svg,noun_dental_2182702.svg
+4,Mental health,,Salud mental,,noun_good Mental health_2686188.svg,noun_Mental health_66159.svg
+4.1,Mental health,Alcohol/drug addiction treatment,Salud mental,Tratamiento para alcoholismo/drogadicción,noun_Alcoholism_2686196.svg,noun_alcoholic_225536.svg
+4.2,Mental health,Psychological support,Salud mental,Apoyo psicológico,noun_Mental health_1211643.svg,noun_psychology_3216399.svg
+5,Education,,Educación,,noun_education_1325461.svg,noun_education_1477048.svg
+5.1,Education,ESL,Educación,Clases de inglés,noun_American_2518886(1).svg,
+5.2,Education,Adult education,Educación,Cursos para adultos,noun_Class_550290.svg,noun_Class_3239922.svg
+5.3,Education,Citizenship preparation,Educación,Preparación para la ciudadanía,noun_Passport_185597.svg,noun_Identification Document_68928.svg
+5.4,Education,Career education,Educación,Capacitación profesional,noun_Engineering_636562.svg,noun_Farmer Harvesting Grape_637672.svg
+6,Financial help,,Ayuda financiera,,noun_Charity_2766169.svg,noun_financial support_2139199.svg
+6.1,Financial help,Emergency financial aid,Ayuda financiera,Ayuda financiera de emergencia,noun_business support icon_2851674.svg,noun_Emergency finanical_aid_1640211.svg
+6.2,Financial help,Personal finances,Ayuda financiera,Finanzas personales,noun_finance_749154.svg,noun_finances_943377.svg
+7,Labor,,Trabajo,,noun_crops_145041.svg,noun_Dairy Farmer_974213(1).svg
+7.1,Labor,Job search assistance,Trabajo,Conseguir trabajo,noun_Job Search_600665.svg,noun_Find Employee_2230578.svg
+7.2,Labor,Training,Trabajo,Entrenamiento para el trabajo,noun_training_2457648.svg,noun_rotation_2960071.svg
+7.3,Labor,Career advice,Trabajo,Asesoramiento de carrera,noun_career_2317166.svg,noun_career_2252291.svg
+8,Programs for families,,Programas para familias,,noun_Family_2512276.svg,noun_Family_1107039.svg
+8.1,Programs for families,Childcare,Programas para familias,Centros para el cuidado de niños,noun_mother_2130453.svg,noun_Stroller_2844154.svg
+8.1,Victim support,Domestic violence,Apoyo para víctimas,Violencia domestica,noun_abuse_1784960.svg,noun_abuse_43499.svg
+8.2,Programs for families,Programs for kids,Programas para familias,Programas para niños,noun_Children_851499.svg,noun_playing_53408.svg
+8.2,Victim support,Victim services,Apoyo para víctimas,Servicios para víctimas,noun_victim_2314662.svg,noun_victim_1103352.svg
+8.3,Programs for families,Educational support,Programas para familias,Apoyo educativo,noun_education support_3239930.svg,noun_educational aid_2139201.svg
+8.4,Programs for families,Parenting support,Programas para familias,Apoyo para los padres,noun_parent_687561.svg,noun_parents_1967160.svg
+9,Victim support,,Apoyo para víctimas,,noun_helping disaster victim_2745322(1).svg,noun_fireman rescue victim_2758363.svg
+10,Housing,,Vivienda,,noun_House_1723064.svg,noun_House_635832.svg
+10.1,Housing,Utility assistance,Vivienda,Asistencia para pagos de utilidad,noun_Home Electricity_2244814.svg,noun_Water Bill_420722.svg
+10.2,Housing,Affordable housing,Vivienda,Vivienda accesible,noun_affordable housing_2262867.svg,noun_affordability_2083153.svg
+10.3,Housing,Housing improvements,Vivienda,Mejoramiento de la vivienda,noun_home improvement_25717.svg,noun_House Renovation_1383192.svg
+10.4,Housing,Home ownership,Vivienda,Propieda de la vivienda,noun_Real Estate_30626.svg,noun_Key_428295.svg
+11,Leadership training,,Capacitación en liderazgo,,noun_training_1984139.svg,noun_leadership_1333639.svg
+11.1,Leadership training,Empowerment,Capacitación en liderazgo,Empoderamiento,noun_leadership_2909348.svg,noun_coaching_66723.svg
+11.2,Leadership training,Educational initiatives,Capacitación en liderazgo,Iniciativas Educaciónales,noun_personal development_2139248.svg,noun_education_1939950.svg
+11.3,Leadership training,Legislative advocacy,Capacitación en liderazgo,Promoción de leyes y política,noun_Congress_2952587.svg,noun_speech_2051902.svg
+12,Transportation,,Transportación,,noun_Van_1791994.svg,
+13,Translation,,Interpretación,,noun_interpreter_1773445.svg,
+14,Religious services,,Servicios religiosos,,,
+15,Elderly services,,Servicios para los ancianos,,noun_Elderly_14525.svg,noun_geriatric_2305915.svg
+16,Referral to other agencies,,Referencias a otros servicios,,noun_referral_2526266.svg,noun_referral_859827.svg

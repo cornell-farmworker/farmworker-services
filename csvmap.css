@@ -2,7 +2,7 @@ a { text-decoration:none ; color:#00c}
 a:hover, a:active { text-decoration:underline }
 body { font-family:"Segoe UI", Roboto, Arial, sans-serif ; margin:0 }
 
-h1 { margin:0 ; font-size:100% ; font-weight:bold ; background:#b31b1b ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
+h1 { margin:0 ; font-size:150% ; font-weight:bold ; background:#b31b1b ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
 h1 a { text-decoration:none ; color:#fff ! important }
 h1 a:hover { xcolor:#f88 ! important }
 

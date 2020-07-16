@@ -1,15 +1,15 @@
 sort,category-en,subcategory-en,category-es,subcategory-es,icon1,icon2
 1,Legal aid,,Asistencia legal,,noun_legal_2077366.svg,noun_legal_3082155.svg
 1.1,Legal aid,Immigration law,Asistencia legal,"Inmigración (deportación, ciudadanía y regularización)",noun_Immigration_2858010.svg,noun_Immigration_3140877.svg
-1.2,Legal aid,Family law,Asistencia legal,Leyes familiar,noun_Family_642285.svg,noun_Family_686641.svg
+1.2,Legal aid,Family law,Asistencia legal,Ley familiar,noun_Family_642285.svg,noun_Family_686641.svg
 1.3,Legal aid,Labor rights,Asistencia legal,Derechos laborales,noun_Fair Labor Rights_58375.svg,noun_labor_2902727.svg
 1.4,Legal aid,Other law,Asistencia legal,Otros casos legales,noun_Law_1055409.svg,noun_Law_2041951.svg
-2,Emergency assistance,,Asistencia de emergencias,,noun_Care line_438491.svg,noun_emergency call_3157172.svg
-2.1,Emergency assistance,Food,Asistencia de emergencias,Alimentos,noun_Shopping Cart_327624.svg,noun_Food_2483050.svg
-2.2,Emergency assistance,Clothing,Asistencia de emergencias,Ropa,noun_clothing_2207999.svg,noun_clothing_2207999.svg
-2.2,Emergency assistance,Emergency shelter,Asistencia de emergencias,Refugio de emergencia,noun_Shelter_559521.svg,noun_Shelter_24591.svg
-2.3,Emergency assistance,Medicine,Asistencia de emergencias,Medicina,noun_Medicine_3306510.svg,noun_Medicine_3284080.svg
-2.4,Emergency assistance,Other needs,Asistencia de emergencias,Otras necesidades,noun_Shelter_24591.svg,noun_assistance_635295.svg
+2,Emergency assistance,,Asistencia en casos de emergencia,,noun_Care line_438491.svg,noun_emergency call_3157172.svg
+2.1,Emergency assistance,Food,Asistencia en casos de emergencia,Alimentos,noun_Shopping Cart_327624.svg,noun_Food_2483050.svg
+2.2,Emergency assistance,Clothing,Asistencia en casos de emergencia,Ropa,noun_clothing_2207999.svg,noun_clothing_2207999.svg
+2.2,Emergency assistance,Emergency shelter,Asistencia en casos de emergencia,Refugio de emergencia,noun_Shelter_559521.svg,noun_Shelter_24591.svg
+2.3,Emergency assistance,Medicine,Asistencia en casos de emergencia,Medicina,noun_Medicine_3306510.svg,noun_Medicine_3284080.svg
+2.4,Emergency assistance,Other needs,Asistencia en casos de emergencia,Otras necesidades,noun_Shelter_24591.svg,noun_assistance_635295.svg
 3,Health,,Salud,,noun_Health_2377441.svg,noun_Stethoscope_187692.svg
 3.1,Health,General medicine,Salud,Medicina general,noun_Health_2188971.svg,noun_Doctor_167328.svg
 3.2,Health,Women's health,Salud,Salud de la mujer,noun_Nurse_2588386.svg,noun_Pregnancy_1339472.svg
@@ -47,7 +47,7 @@ sort,category-en,subcategory-en,category-es,subcategory-es,icon1,icon2
 10.4,Housing,Home ownership,Vivienda,Propieda de la vivienda,noun_Real Estate_30626.svg,noun_Key_428295.svg
 11,Leadership training,,Capacitación en liderazgo,,noun_training_1984139.svg,noun_leadership_1333639.svg
 11.1,Leadership training,Empowerment,Capacitación en liderazgo,Empoderamiento,noun_leadership_2909348.svg,noun_coaching_66723.svg
-11.2,Leadership training,Educational initiatives,Capacitación en liderazgo,Iniciativas educaciónales,noun_personal development_2139248.svg,noun_education_1939950.svg
+11.2,Leadership training,Educational initiatives,Capacitación en liderazgo,Iniciativas educacionales,noun_personal development_2139248.svg,noun_education_1939950.svg
 11.3,Leadership training,Legislative advocacy,Capacitación en liderazgo,Promoción de leyes y política,noun_Congress_2952587.svg,noun_speech_2051902.svg
 12,Transportation,,Transportación,,noun_Van_1791994.svg,
 13,Translation,,Interpretación,,noun_interpreter_1773445.svg,

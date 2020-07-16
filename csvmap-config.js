@@ -48,6 +48,33 @@ var csvmap = {
         {{#subcategory}}<dt>Subcategory</dt><dd>{{{subcategory}}}</dd>{{/subcategory}}
       </dl>
     `,
+    template_es: `
+      <h2>{{organization}}</h2>
+      {{#website}}{{{website}}}{{/website}}
+      <dl>
+        <dt>Dirección</dt>
+        <dd>{{address}},
+          {{#address2}}{{address2}}, {{/address2}}
+          {{#pobox}}{{pobox}}, {{/pobox}}
+          <br>
+          {{city}}, {{state}} {{zipcode}}
+          (<a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">direcciones</a>)
+        </dd>
+        {{#county}}<dt>Condado</dt><dd>{{county}}</dd>{{/county}}
+        {{#phone}}<dt>Teléfono</dt><dd>{{phone}}</dd>{{/phone}}
+        {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}
+        {{#email}}<dt>Contacto</dt><dd>{{{email}}}</dd>{{/email}}
+        {{#hours}}<dt>Horrario</dt><dd>{{hours}}</dd>{{/hours}}
+        {{#transportation}}<dt>Transportación</dt><dd>{{transportation}}</dd>{{/transportation}}
+        {{#translation}}<dt>Interpretación</dt><dd>{{translation}}</dd>{{/translation}}
+        {{#bilingual}}<dt>Bilingüe</dt><dd>{{bilingual}}</dd>{{/bilingual}}
+        {{#documents}}<dt>Documentos</dt><dd>{{documents}}</dd>{{/documents}}
+        {{#citizenship}}<dt>Ciudadanía</dt><dd>{{citizenship}}</dd>{{/citizenship}}
+        {{#cost}}<dt>Costos</dt><dd>{{cost}}</dd>{{/cost}}
+        {{#category}}<dt>Categoría</dt><dd>{{{category}}}</dd>{{/category}}
+        {{#subcategory}}<dt>Subcategoría</dt><dd>{{{subcategory}}}</dd>{{/subcategory}}
+      </dl>
+    `,
     labels: {
       'en': {
         'county': 'County',

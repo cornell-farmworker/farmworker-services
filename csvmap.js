@@ -328,7 +328,7 @@ function show_info(layer) {
     p2[property] = value;
 
   }
-  var html = Mustache.render(csvmap.config['template_'+csvmap.lang], p2);
+  var html = Mustache.render(csvmap.config['template_' + csvmap.lang], p2);
   document.getElementById('info').innerHTML = html;
   if (csvmap.mobile()) {
     var s = document.getElementById('search')

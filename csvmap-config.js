@@ -23,8 +23,8 @@ var csvmap = {
     seen: {},
     template_en: `
       <h2>{{organization}}</h2>
-      {{#website}}{{{website}}}{{/website}}
       <dl>
+        {{#website}}<dt>Website</dt><dd>{{{website}}}</dd>{{/website}}
         <dt>Address</dt>
         <dd>{{address}},
           {{#address2}}{{address2}}, {{/address2}}
@@ -50,8 +50,8 @@ var csvmap = {
     `,
     template_es: `
       <h2>{{organization}}</h2>
-      {{#website}}{{{website}}}{{/website}}
       <dl>
+        {{#website}}<dt>Sitio web</dt><dd>{{{website}}}</dd>{{/website}}
         <dt>Dirección</dt>
         <dd>{{address}},
           {{#address2}}{{address2}}, {{/address2}}

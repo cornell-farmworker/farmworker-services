@@ -22,7 +22,11 @@ function gotLocationError(result) {
 }
 
 // fadeAnimation:false is recommended for grayscale tilelayer, otherwise it may flicker
-var map = L.map('map', { fadeAnimation:false });
+var map = L.map('map', {
+  fadeAnimation: false,
+  fullscreenControl: true
+});
+
   //.on('click', function(e) { console.log(e.latlng); })
   //.setMaxBounds([[42.4328,-76.4996], [42.4674,-76.4478]]);
 

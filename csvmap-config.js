@@ -31,7 +31,8 @@ var csvmap = {
           {{#pobox}}{{pobox}}, {{/pobox}}
           <br>
           {{city}}, {{state}} {{zipcode}}
-          (<a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">directions</a>)
+          <br>
+          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Directions <img src='image/icons/map.svg'></a>
         </dd>
         {{#county}}<dt>County</dt><dd>{{county}}</dd>{{/county}}
         {{#phone}}<dt>Phone</dt><dd>{{phone}}</dd>{{/phone}}
@@ -58,7 +59,8 @@ var csvmap = {
           {{#pobox}}{{pobox}}, {{/pobox}}
           <br>
           {{city}}, {{state}} {{zipcode}}
-          (<a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">direcciones</a>)
+          <br>
+          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Direcciones <img src='image/icons/map.svg'></a>
         </dd>
         {{#county}}<dt>Condado</dt><dd>{{county}}</dd>{{/county}}
         {{#phone}}<dt>Teléfono</dt><dd>{{phone}}</dd>{{/phone}}

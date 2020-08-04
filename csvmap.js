@@ -101,12 +101,12 @@ var customLayer = L.geoJson(null, {
             // check for invalid categories/subcategories (en or es)
             if (p=='category') {
               if (csvmap.categories.indexOf(v2v)===-1) {
-                console.log('Invalid category: '+v2v);
+                console.log('record ' + feature.properties.id + ' has an invalid category: '+v2v);
               }
             }
             else if (p=='subcategory') {
               if (csvmap.subcategories.indexOf(v2v)===-1) {
-                console.log('Invalid subcategory: '+v2v);
+                console.log('record ' + feature.properties.id + ' has an invalid subcategory: '+v2v);
               }
             }
           }

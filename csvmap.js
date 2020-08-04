@@ -438,26 +438,11 @@ function submitSearch(e) {
 function search(q, showid) {
   // showid is optional, and will show details for that result
 
-  // replace slashes with space
-  q = q.replace(/\//g, '.');
-
-  // query must match beginning of a word
-  var re = new RegExp('\\b' + escapeRegExp(q), 'i');
-
-  // sort layers by name
+  // start by sorting all layers
   var layers = window.points.getLayers();
-  layers.sort(function(a,b){
-    var aa = a.feature.properties[csvmap.config.name_field].toLowerCase();
-    var bb = b.feature.properties[csvmap.config.name_field].toLowerCase();
-    if (aa<bb) return -1;
-    if (aa>bb) return 1;
-    return 0;
-  });
 
-  // sort layers by proximity
   if (csvmap.location) {
-    // calculation distances from user location
-    // TODO do this when we first load the data?
+    // sort layers by distance to user location
     var ruler = new CheapRuler(42.8, 'miles');
     for (var i=0; i<layers.length; i++) {
       var dist = ruler.distance(layers[i].feature.geometry.coordinates, [csvmap.location.longitude, csvmap.location.latitude]);
@@ -466,6 +451,16 @@ function search(q, showid) {
     layers.sort(function(a,b){
       var aa = a.feature.properties.csvmapdist;
       var bb = b.feature.properties.csvmapdist;
+      if (aa<bb) return -1;
+      if (aa>bb) return 1;
+      return 0;
+    });
+  }
+  else {
+    // sort alphabetically if we don't know user location
+    layers.sort(function(a,b){
+      var aa = a.feature.properties[csvmap.config.name_field].toLowerCase();
+      var bb = b.feature.properties[csvmap.config.name_field].toLowerCase();
       if (aa<bb) return -1;
       if (aa>bb) return 1;
       return 0;
@@ -480,11 +475,26 @@ function search(q, showid) {
   clearHome();
   window.scrollTo(0,0);
 
+  // replace slashes with space
+  q = q.replace(/\//g, '.');
+
+  // create regexp for each term in the query
+  var qterms = q.split(' ');
+  var regexps = [];
+  for (var i=0; i<qterms.length; i++) {
+    // query must match beginning of a word
+    var re = new RegExp('\\b' + escapeRegExp(qterms[i]), 'i');
+    regexps.push(re);
+  }
+
   var lastMatch = null;
   var bounds = L.latLngBounds();
   for (var i=0; i<layers.length; i++) {
     var item = layers[i];
-    if (item.feature.properties._fulltext.match(re)) {
+    var tests = regexps.map(x => item.feature.properties._fulltext.match(x));
+
+    if (tests.every(x => x)) {
+      // all query terms match
       lastMatch = item;
       item.addTo(map);
 

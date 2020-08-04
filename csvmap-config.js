@@ -41,7 +41,7 @@ var csvmap = {
         {{#transportation}}<dt>Transportation</dt><dd>{{transportation}}</dd>{{/transportation}}
         {{#translation}}<dt>Translation</dt><dd>{{translation}}</dd>{{/translation}}
         {{#bilingual}}<dt>Bilingual</dt><dd>{{bilingual}}</dd>{{/bilingual}}
-        {{#documents}}<dt>Documents</dt><dd>{{documents}}</dd>{{/documents}}
+        {{#documents}}<dt>Required documents</dt><dd>{{documents}}</dd>{{/documents}}
         {{#citizenship}}<dt>Citizenship</dt><dd>{{citizenship}}</dd>{{/citizenship}}
         {{#cost}}<dt>Cost</dt><dd>{{cost}}</dd>{{/cost}}
         {{#category}}<dt>Category</dt><dd>{{{category}}}</dd>{{/category}}
@@ -68,7 +68,7 @@ var csvmap = {
         {{#transportation}}<dt>Transportación</dt><dd>{{transportation}}</dd>{{/transportation}}
         {{#translation}}<dt>Interpretación</dt><dd>{{translation}}</dd>{{/translation}}
         {{#bilingual}}<dt>Bilingüe</dt><dd>{{bilingual}}</dd>{{/bilingual}}
-        {{#documents}}<dt>Documentos</dt><dd>{{documents}}</dd>{{/documents}}
+        {{#documents}}<dt>Documentos requeridos</dt><dd>{{documents}}</dd>{{/documents}}
         {{#citizenship}}<dt>Ciudadanía</dt><dd>{{citizenship}}</dd>{{/citizenship}}
         {{#cost}}<dt>Costos</dt><dd>{{cost}}</dd>{{/cost}}
         {{#category}}<dt>Categoría</dt><dd>{{{category}}}</dd>{{/category}}

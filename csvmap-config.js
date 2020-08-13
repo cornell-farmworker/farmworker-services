@@ -19,7 +19,7 @@ var csvmap = {
     linked_fields: [ 'email', 'website' ],
 
     autocomplete_fields: [ 'category', 'subcategory', 'city', 'county', 'organization' ],
-    unsearched_fields: [ 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
+    unsearched_fields: [ 'address', 'address2', 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
     seen: {},
     template_en: `
       <h2>{{organization}}</h2>

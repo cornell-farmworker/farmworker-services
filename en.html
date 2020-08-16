@@ -14,6 +14,7 @@
 <script src="lib/leaflet-omnivore.min.js"></script>
 <script src="lib/leaflet-tilelayer-colorfilter.min.js"></script>
 <script src="lib/leaflet-fullscreen.min.js"></script>
+<script src="lib/leaflet-sleep.js"></script>
 <script src="lib/awesomplete.min.js"></script>
 <script src="lib/papaparse.min.js"></script>
 <script src="lib/mustache.min.js"></script>
@@ -22,21 +23,37 @@
 
 <body>
 
-<h1 id='title'><a href='index.html'>Farmworker Service Directory</a></h1>
+<h1 id='title'><a href='en.html'>Farmworker Service Directory</a></h1>
+
+<div id='home'>
+  <img src='image/cows-barn.png'>
+  <div>Welcome the Farmworker Service Directory, a statewide directory of resources, in English and Spanish, for farmworkers and immigrants across New York State.</div>
+  <button id='browseButton'>Search the directory</button><br>
+  <div>The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.</div>
+</div>
 
 <div id='search'>
   <form id='searchform'>
-    Search for farmworker services in New York State:<br>
+    <b>Search for services in New York State:</b><br>
     <input id='q' placeholder='city, county, organization, or category' />
     <button type='submit'>search</button>
   </form>
-  <div id='home'></div>
-  <ul id='results'></ul>
 </div>
 
-<div id='info'></div>
+<div id='browse'></div>
+
+<div id='results'></div>
+
+<div id='item'></div>
 
 <div id='map'></div>
+
+<div id='footer'>
+  Created and maintained by the<br>
+  <a href='https://cardi.cals.cornell.edu/programs/farmworker/'><img src='image/CFP-logo.jpg'></a><br>
+  (607) 254-5194<br>
+  <a href='mailto:farmworkers@cornell.edu'>farmworkers@cornell.edu</a>
+</div>
 
 <script>var lang='en';</script>
 <script src='csvmap-config.js'></script>

@@ -2,9 +2,10 @@
 
 window.addEventListener('hashchange', interpretHash, false);
 document.getElementById('searchform').onsubmit = submitSearch;
+document.getElementById('browseButton').onclick = show_browse;
 document.onkeyup = function(e) {
   if (e.key=='Escape') {
-    clearInfo();
+    clearItem();
   }
 }
 
@@ -12,7 +13,6 @@ document.onkeyup = function(e) {
 navigator.geolocation.getCurrentPosition(gotLocation, gotLocationError, {enableHighAccuracy:false});
 
 function gotLocation(result) {
-  console.log('got location');
   console.log(result);
   csvmap.location = result.coords;
 }
@@ -24,11 +24,14 @@ function gotLocationError(result) {
 // fadeAnimation:false is recommended for grayscale tilelayer, otherwise it may flicker
 var map = L.map('map', {
   fadeAnimation: false,
-  fullscreenControl: true
+  fullscreenControl: true,
+
+  // sleep options (to prevent unwanted scrolling)
+  sleepTime:500,
+  wakeTime:1000
 });
 
-  //.on('click', function(e) { console.log(e.latlng); })
-  //.setMaxBounds([[42.4328,-76.4996], [42.4674,-76.4478]]);
+map.on('click', function(e) { console.log(e.latlng); });
 
 // use a openstreetmap basemap
 var osm = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -57,9 +60,9 @@ var customLayer = L.geoJson(null, {
   },
   style: function() {
     return {
-      radius: 8,
+      radius: 6,
       color: '#eee',
-      fillColor: '#b31b1b',
+      fillColor: '#078b6c',
       weight: 1,
       fillOpacity:1
     };
@@ -120,7 +123,7 @@ var customLayer = L.geoJson(null, {
     }
     feature.properties._fulltext = fulltext;
     layer.bindTooltip(feature.properties[csvmap.config.name_field], {direction:'right'});
-    layer.on('click', function(e){ show_info(e.target); });
+    layer.on('click', function(e){ show_item(e.target); });
   }
 });
 
@@ -135,9 +138,10 @@ function loadPoints() {
     .on('ready', function(err, data) {
       // once we have all the data...
       var layers = this.getLayers();
-      //console.log('loaded ' + layers.length + ' points from ' + csvmap.config.data_file);
+      console.log('loaded ' + layers.length + ' points from ' + csvmap.config.data_file);
       initAutocomplete(layers);
-      //search(''); // interpretHash won't display points unless we start by searching for everything
+      show_results('', search('')); // interpretHash won't display points unless we start by searching for everything
+      buildBrowse();
       interpretHash();
     })
     .on('error', function(x) {
@@ -246,19 +250,16 @@ function initAutocomplete(layers) {
   });
   // execute the search whenever the input changes
   q.addEventListener('awesomplete-selectcomplete', submitSearch);
-  //q.oninput = search;
-  //q.onkeyup = search; // just in case the browser doesn't support oninput
   q.focus();
-  //interpretHash();
-  //search();
 }
 
 
 function interpretHash() {
   // automatically search for terms in the URL hash,
   // so that links to specific searches or features can be shared by URL
+  // TODO only do this upon initial pageLoad?
   var hash = location.hash;
-  //console.log('interpret hash '+hash);
+  console.log('interpret hash '+hash);
 
   // unescape hash
   hash = unescape(hash).replace(/\+/g, ' ');
@@ -271,7 +272,7 @@ function interpretHash() {
     q = '';
     id = hash.split('/')[2];
     if (id === undefined) {
-      home();
+      show_home();
       return false;
     }
   }
@@ -279,14 +280,20 @@ function interpretHash() {
   document.title += ': ' + q + ' / ' + id;
   document.getElementById('q').value = q;
   document.getElementById('q').innerHTML = q;
-  search(q, id);
+  show_results(q, search(q), id);
 }
 
 
-function show_info(layer) {
-  // return info HTML for the layer feature
-  // TODO use mustache templates?
-  clearInfo();
+function show_item(layer) {
+  // show item details for the layer feature
+  console.log('showing item...');
+  console.log(layer);
+  clearItem();
+  document.getElementById('item').style.display = 'block';
+  document.getElementById('map').style.display = 'block';
+  if (map.isFullscreen()) {
+    map.toggleFullscreen();
+  }
 
   var p = layer.feature.properties;
   var p2 = {};
@@ -332,11 +339,14 @@ function show_info(layer) {
     p2[property] = value;
 
   }
+
   var html = Mustache.render(csvmap.config['template_' + csvmap.lang], p2);
-  document.getElementById('info').innerHTML = html;
+  document.getElementById('item').innerHTML = html;
+
   if (csvmap.mobile()) {
     var s = document.getElementById('search')
     document.getElementById('search').style.display = 'none';
+    document.getElementById('results').style.display = 'none';
     var rs = document.getElementById('restoreSearch');
     if (rs) {
       rs.remove();
@@ -352,11 +362,26 @@ function show_info(layer) {
   document.title = csvmap.config.title + ': ' + p[csvmap.config.name_field];
 
   // highlight this marker
-  layer.bringToFront().setStyle({fillColor:'#ff0', color:'#000', radius:12});
+  layer.bringToFront().setStyle({
+    fillColor:'#ffff00',
+    color:'#000',
+    weight:1,
+    radius:10
+  });
 }
+
+function goToSearch() {
+  console.log('goToSearch');
+  document.getElementById('search').style.display = 'block';
+  document.getElementById('browse').style.display = 'block';
+  document.getElementById('home').style.display = 'none';
+}
+
 
 function restoreSearch() {
   document.getElementById('search').style.display = 'block';
+  document.getElementById('results').style.display = 'block';
+  clearItem();
   document.getElementById('restoreSearch').remove();
 }
 
@@ -368,12 +393,8 @@ function icon(category) {
   return img;
 }
 
-function clearHome() {
-  document.getElementById('home').innerHTML = '';
-}
-
-function clearInfo() {
-  document.getElementById('info').innerHTML = '';
+function clearItem() {
+  document.getElementById('item').innerHTML = '';
   // reset all markers
   window.points.eachLayer(function(el){
     window.points.resetStyle(el);
@@ -400,13 +421,28 @@ function encodeHash(h) {
   return h;
 }
 
-function home() {
-  location.hash = '/';
+function show_home() {
+  document.getElementById('home').style.display = 'block';
+  document.getElementById('search').style.display = 'none';
+  document.getElementById('browse').style.display = 'none';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('map').style.display = 'none';
+}
+
+function show_browse() {
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('search').style.display = 'block';
+  document.getElementById('browse').style.display = 'block';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('item').style.display = 'none';
+  document.getElementById('map').style.display = 'none';
+}
+
+function buildBrowse() {
+  // build the list of categories and subcategories
   var tree = csvmap.categoryTree[csvmap.lang];
-  search('');
-  clearInfo();
-  clearResults();
-  clearHome();
+  var b = document.getElementById('browse');
+  b.innerHTML = '';
   var ul = document.createElement('ul');
   for (var cat in tree) {
     var li = document.createElement('li');
@@ -422,7 +458,7 @@ function home() {
     }
     ul.appendChild(ul2);
   }
-  document.getElementById('home').append(ul);
+  b.append(ul);
 }
 
 function submitSearch(e) {
@@ -431,12 +467,12 @@ function submitSearch(e) {
   var q = document.getElementById('q').value.trim();
   location.hash = '/' + encodeHash(q);
   document.title = csvmap.config.title + ': ' + q;
-  search(q);
+  show_results(q, search(q));
   return false;
 }
 
-function search(q, showid) {
-  // showid is optional, and will show details for that result
+function search(q) {
+  // search for the given query string q and return sorted array of results
 
   // start by sorting all layers
   var layers = window.points.getLayers();
@@ -467,14 +503,6 @@ function search(q, showid) {
     });
   }
 
-  // reset results
-  document.getElementById('search').style.display = 'block';
-  var results = document.getElementById('results');
-  clearResults();
-  clearInfo();
-  clearHome();
-  window.scrollTo(0,0);
-
   // replace slashes with space
   q = q.replace(/\//g, '.');
 
@@ -487,66 +515,94 @@ function search(q, showid) {
     regexps.push(re);
   }
 
-  var lastMatch = null;
-  var bounds = L.latLngBounds();
+  var results = [];
   for (var i=0; i<layers.length; i++) {
     var item = layers[i];
     var tests = regexps.map(x => item.feature.properties._fulltext.match(x));
 
+    // if all query terms match, add to results
     if (tests.every(x => x)) {
-      // all query terms match
-      lastMatch = item;
-      item.addTo(map);
+      results.push(item);
+    }
+  }
+  return results;
+}
+
+function clearMap() {
+  var layers = window.points.getLayers();
+  for (var i=0; i<layers.length; i++) {
+    layers[i].remove();
+  }
+}
+
+function show_results(q, results, showid) {
+  // reset results
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('search').style.display = 'block';
+  document.getElementById('browse').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('item').style.display = 'none';
+  document.getElementById('map').style.display = 'block';
+  clearMap();
+  clearResults();
+  clearItem();
+  window.scrollTo(0,0);
+
+  var resultsList = document.createElement('ul');
+  document.getElementById('results').append(resultsList);
+
+  var lastMatch = null;
+  var bounds = L.latLngBounds();
+
+  for (var i=0; i<results.length; i++) {
+    var item = results[i];
+    lastMatch = item;
+    item.addTo(map);
+
+    var ll = item.getLatLng();
+    if (ll.lat != 0 || ll.lng != 0) {
+      // expand bounds to include current point
+      bounds.extend(item.getLatLng());
+    }
+
+    var id = item.feature.properties.id;
+    var name = item.feature.properties[csvmap.config.name_field];
+    var li = document.createElement('li');
+    li.innerHTML = '<a href="#/' + encodeHash(q) + '/' + encodeHash(id) + '">'+name+'</a>';
+    var a = li.firstChild;
+
+    // link to marker on map
+    a.setAttribute('data', i);
+    a.onmouseover = function(e){
+      var id = e.target.getAttribute('data');
+      item.openTooltip();
+    }
+    a.onmouseout = function(e){
+      var id = e.target.getAttribute('data');
+      item.closeTooltip();
+    }
+    a.onclick = function(e){
+      var id = e.target.getAttribute('data');
+      show_item(item);
 
       var ll = item.getLatLng();
       if (ll.lat != 0 || ll.lng != 0) {
-        // expand bounds to include current point
-        bounds.extend(item.getLatLng());
-      }
-
-      var id = item.feature.properties.id;
-      var name = item.feature.properties[csvmap.config.name_field];
-      var li = document.createElement('li');
-      li.innerHTML = '<a href="#/' + encodeHash(q) + '/' + encodeHash(id) + '">'+name+'</a>';
-      var a = li.firstChild;
-
-      // link to marker on map
-      a.setAttribute('data', i);
-      a.onmouseover = function(e){
-        var id = e.target.getAttribute('data');
-        layers[id].openTooltip();
-      }
-      a.onmouseout = function(e){
-        var id = e.target.getAttribute('data');
-        layers[id].closeTooltip();
-      }
-      a.onclick = function(e){
-        var id = e.target.getAttribute('data');
-
-        var item = layers[id];
-        show_info(item);
-
-        var ll = item.getLatLng();
-        if (ll.lat != 0 || ll.lng != 0) {
-          map.panTo(ll);
-        }
-      }
-      a.onfocus = function(e){
-        e.target.click();
-      }
-
-      results.appendChild(li);
-      if (id === showid) {
-        a.focus();
+        map.panTo(ll);
       }
     }
-    else {
-      item.remove();
+    a.onfocus = function(e){
+      e.target.click();
+    }
+
+    resultsList.appendChild(li);
+    if (id === showid) {
+      // typing
+      a.focus();
     }
   }
   // automatically show details if there is only one match
-  if (results.childNodes.length == 1) {
-    show_info(lastMatch);
+  if (resultsList.childNodes.length == 1) {
+    show_item(lastMatch);
   }
 
   // pad the bounds by 10% so that points aren't right on the edge of the map
@@ -554,3 +610,5 @@ function search(q, showid) {
     map.fitBounds(bounds.pad(0.03));
   }
 }
+
+

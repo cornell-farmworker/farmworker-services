@@ -1,38 +1,57 @@
-a { text-decoration:none ; color:#00c}
-a:hover, a:active { text-decoration:underline }
+/* #078b6c dark green color from Creating Positive Workplaces
+ * https://cornell.app.box.com/s/7sgp9o6j5zzqjk02q5luqkopal3thzgc
+ */
+
+a { text-decoration:none ; color:#078b6c ; font-weight:bold }
+a:hover, a:active { text-decoration:underline ; color:#078b6c }
 body { font-family:"Segoe UI", Roboto, Arial, sans-serif ; margin:0 }
 
-h1 { margin:0 ; font-size:150% ; font-weight:bold ; background:#b31b1b ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
+button { background:#078b6c ; color:#fff ; border:none ; border-radius:0.8em ; padding:0.5em 1em }
+button:hover { cursor:pointer }
+
+h1 { margin:0 ; font-size:135% ; font-weight:bold ; background:#078b6c ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
 h1 a { text-decoration:none ; color:#fff ! important }
 
-#search { width:25% ; float:left ; padding:0 1% }
-#q { width:20em }
+#search { float:float ; padding:0.5em 1% ; text-align:left }
+#q { width:20em ; clear:left }
 .awesomplete { z-index:99999 ; font-family: Arial ; font-size:80% }
 .awesomplete > ul { transition:none ; background:rgba(255,255,255,1) }
 .awesomplete input { width:20em }
 .awesomplete mark { background:none ! important ; font-weight:bold }
 
-#home > ul { font-weight:bold ; list-style-type:none ; margin-left:0 ; padding-left:0 ; padding-inline-start:0 }
-#home > ul > li { width:100% }
-#home > ul > ul { font-weight:normal ; margin-left:2em }
-#home a { color:#008 ; width:100% ; display:block }
-#home img { height:32px ; vertical-align:middle }
+#home { background:#fff ; color:#000 ; text-align:center ; max-width:40em ; margin:0 auto }
+#home img { width:100% ; max-width:400px }
+#home div { padding:1em }
+#home #goToSearch { font-size:150% }
+#home div.cfp { background:#078b6c ; color:#fff ; padding:3px 6px ; font-size:150% }
+#home div.cfp a { font-weight:bold ; text-decoration:underline ; color:#fff }
 
-#results a { text-decoration:none ; color:#008 }
-#results a:hover, #results a:focus { text-decoration:underline ; color:#00c }
-#results.home { list-style-type:none }
+#footer { clear:both ; text-align:center ; margin-top:1.5em ; padding:6px ; background:#078b6c ; color:#fff }
+#footer img { width:90% ; max-width:330px ; border:0.3em outset }
+#footer a { color:#fff ; text-decoration:underline }
+
+#browse { clear:both }
+#browse > ul { font-weight:bold ; list-style-type:none ; margin:0 ; padding-left:0 ; padding-inline-start:0 }
+#browse > ul > li { width:100% }
+#browse > ul > ul { font-weight:normal ; margin-left:2em }
+#browse a { color:#078b6c ; width:100% ; display:block }
+#browse img { height:32px ; vertical-align:middle }
+
+#results { clear:both ; width:25% ; float:left ; padding: 0 1% }
+#results a { text-decoration:none ; color:#078b6c }
+#results a:hover, #results a:focus { text-decoration:underline ; color:#078b6c }
 
 #map { height:95% ; width:40% }
 
-#info { width:31% ; padding:0 1% ; float:right }
-#info > h2 { margin:0 ; text-align:left ; font-size:120% ; font-weight:bold }
-#info dl { display:grid ; grid-template-columns:25% 75% }
-#info dt { grid-column-start:1 ; color:#aaa ; text-align:right ; vertical-align:top ; margin:3px 4px 0 0 ; font-size:85% }
-#info dt:after { content:': ' }
-#info dd { grid-column-start:2 ; margin:2px 0 0 }
-#info ul { margin:0 ; padding:0 ; list-style-type:none }
-#info ul li { margin:0 ; overflow-wrap:anywhere }
-#info img { height:32px ; vertical-align:middle }
+#item { width:31% ; padding:0 1% ; position:absolute ; top:3em ; right:0 }
+#item > h2 { margin:0 ; text-align:left ; font-size:120% ; font-weight:bold }
+#item dl { display:grid ; grid-template-columns:25% 75% }
+#item dt { grid-column-start:1 ; color:#aaa ; text-align:right ; vertical-align:top ; margin:3px 4px 0 0 ; font-size:85% }
+#item dt:after { content:': ' }
+#item dd { grid-column-start:2 ; margin:2px 0 0 }
+#item ul { margin:0 ; padding:0 ; list-style-type:none }
+#item ul li { margin:0 ; overflow-wrap:anywhere }
+#item img { height:32px ; vertical-align:middle }
 
 
 
@@ -42,20 +61,24 @@ h1 a { text-decoration:none ; color:#fff ! important }
 
 @media screen and (max-width:800px) {
 
+#home { background-image:none }
+
 #search { width:100% ; float:none }
 
 #restoreSearch { position:sticky ; top:1.85em }
-#restoreSearch ul { font-weight:bold ; list-style-type:none ; xwidth:100% ; margin:2px 0 ; padding:3px 6px ; background:#831b1b ; color:#fff }
+#restoreSearch ul { font-weight:bold ; list-style-type:none ; xwidth:100% ; margin:2px 0 ; padding:3px 6px ; background:#078b6c ; color:#fff }
 #restoreSearch li { text-align:right }
 
-#home ul { list-style-type:none ; width:100% ; padding-inline-start:0 }
-#home > ul > li { background:#ddd }
-#home > ul > ul { margin-left:0 }
-#home li { border-top:2px solid #fff }
-#home > ul > ul > li { padding-left:2em ; background:#eee }
+#browse ul { list-style-type:none ; width:100% ; padding-inline-start:0 }
+#browse > ul > li { background:#ddd }
+#browse > ul > ul { margin-left:0 }
+#browse li { border-top:2px solid #fff }
+#browse > ul > ul > li { padding-left:2em ; background:#eee }
+
+#results { width:100% ; float:none }
 
 #map { height:320px ; width:100% ; clear:both }
 
-#info { width:98% ; padding:0 1% ; float:none ; clear:both }
+#item { width:98% ; padding:0 1% ; float:none ; clear:both ; position:initial }
 
 }

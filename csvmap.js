@@ -27,7 +27,8 @@ var map = L.map('map', {
   fullscreenControl: true,
   sleep: csvmap.mobile(), // activate sleep only when using a small screen
   sleepTime: 500,
-  wakeTime: 1000
+  wakeTime: 1000,
+  wakeMessage: csvmap.lang==='es' ? 'haga clic o coloque el cursor para despertar' : 'click or hover to wake'
 });
 
 
@@ -40,12 +41,13 @@ var osm = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/light_all/{
   opacity: 1,
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="https://carto.com/location-data-services/basemaps/">Carto</a>',
   filter: [
-    'brightness:60%',
-    'contrast:400%',
-    'saturate:150%'
+    'brightness:65%',
+    'contrast:300%',
+    'saturate:100%'
   ]
 }).addTo(map);
 
+csvmap.id2leafid = {};
 Papa.parse(csvmap.config.categories_file, {
   download: true,
   header: true,
@@ -142,13 +144,23 @@ function loadPoints() {
       initAutocomplete(layers);
       show_results('', search('')); // interpretHash won't display points unless we start by searching for everything
       buildBrowse();
+
+      // index the internal leaflet ids to the table ids
+      var t = points.getLayers();
+      for (var i=0; i<t.length; i++) {
+        var id = t[i].feature.properties.id;
+        csvmap.id2leafid[id] = i;
+      }
+
       interpretHash();
+
     })
     .on('error', function(x) {
       console.log('error parsing '+csvmap.config.data_file);
       console.log(x);
     })
     .addTo(map);
+
 }
 
 
@@ -277,7 +289,7 @@ function interpretHash() {
     }
   }
 
-  document.title += ': ' + q + ' / ' + id;
+  document.title += ': ' + q + (id ? ' / ' + id : '');
   document.getElementById('q').value = q;
   document.getElementById('q').innerHTML = q;
   show_results(q, search(q), id);
@@ -286,8 +298,6 @@ function interpretHash() {
 
 function show_item(layer) {
   // show item details for the layer feature
-  console.log('showing item...');
-  console.log(layer);
   clearItem();
   document.getElementById('item').style.display = 'block';
   document.getElementById('map').style.display = 'block';
@@ -548,16 +558,28 @@ function show_results(q, results, showid) {
   clearItem();
   window.scrollTo(0,0);
 
+  var resultsDiv = document.getElementById('results');
+
+  if (csvmap.location) {
+    var msg = csvmap.lang==='en' ?
+      'The nearest services are listed first.' :
+      'Los servicios más cercanos se enumeran primero.';
+    resultsDiv.innerHTML = '<div>'+msg+'</div>';
+  }
+
   var resultsList = document.createElement('ul');
-  document.getElementById('results').append(resultsList);
+  resultsDiv.append(resultsList);
 
   var lastMatch = null;
   var bounds = L.latLngBounds();
+
+  var layers = window.points.getLayers();
 
   for (var i=0; i<results.length; i++) {
     var item = results[i];
     lastMatch = item;
     item.addTo(map);
+    var leafid = points.getLayerId(item);
 
     var ll = item.getLatLng();
     if (ll.lat != 0 || ll.lng != 0) {
@@ -572,22 +594,22 @@ function show_results(q, results, showid) {
     var a = li.firstChild;
 
     // link to marker on map
-    a.setAttribute('data', i);
+    a.setAttribute('data', id);
     a.onmouseover = function(e){
       var id = e.target.getAttribute('data');
-      item.openTooltip();
+      layers[csvmap.id2leafid[id]].openTooltip();
     }
     a.onmouseout = function(e){
       var id = e.target.getAttribute('data');
-      item.closeTooltip();
+      layers[csvmap.id2leafid[id]].closeTooltip();
     }
     a.onclick = function(e){
       var id = e.target.getAttribute('data');
-      show_item(item);
+      show_item(layers[csvmap.id2leafid[id]]);
 
       var ll = item.getLatLng();
       if (ll.lat != 0 || ll.lng != 0) {
-        map.panTo(ll);
+        map.panTo(ll, { animate:false });
       }
     }
     a.onfocus = function(e){
@@ -596,7 +618,7 @@ function show_results(q, results, showid) {
 
     resultsList.appendChild(li);
     if (id === showid) {
-      // typing
+      // TODO typing to modify the URL doesn't work
       a.focus();
     }
   }
@@ -606,7 +628,7 @@ function show_results(q, results, showid) {
   }
 
   // pad the bounds by 10% so that points aren't right on the edge of the map
-  if (bounds.isValid()) {
+  if (! showid && bounds.isValid()) {
     map.fitBounds(bounds.pad(0.03));
   }
 }

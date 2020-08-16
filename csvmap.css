@@ -30,10 +30,6 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #home .language { background:#034536 ; color:#fff ; padding:3px 6px ; max-width:100% ; text-align:right }
 .language a { color:#fff }
 
-#footer { clear:both ; text-align:center ; margin-top:1.5em ; padding:6px ; background:#078b6c ; color:#fff }
-#footer img { width:90% ; max-width:330px ; border:0.3em outset }
-#footer a { color:#fff ; text-decoration:underline }
-
 #browse { clear:both }
 #browse > ul { font-weight:bold ; list-style-type:none ; margin:0 ; padding-left:0 ; padding-inline-start:0 }
 #browse > ul > li { width:100% }
@@ -41,15 +37,15 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #browse a { color:#078b6c ; width:100% ; display:block }
 #browse img { height:32px ; vertical-align:middle }
 
-#results { clear:both ; width:25% ; float:left ; padding: 0 1% }
+#results { clear:both ; width:30% ; float:left ; padding: 0 1% }
 #results a { text-decoration:none ; color:#078b6c }
 #results a:hover, #results a:focus { text-decoration:underline ; color:#078b6c }
 
-#map { height:95% ; width:40% }
+#map { height:85% ; width:30% ; border:2px solid #000 }
 
-#item { width:31% ; padding:0 1% ; position:absolute ; top:3em ; right:0 }
+#item { width:35% ; padding:0 1% ; float:right }
 #item > h2 { margin:0 ; text-align:left ; font-size:120% ; font-weight:bold }
-#item dl { display:grid ; grid-template-columns:25% 75% }
+#item dl { display:grid ; grid-template-columns:25% 75% ; margin:0 }
 #item dt { grid-column-start:1 ; color:#aaa ; text-align:right ; vertical-align:top ; margin:3px 4px 0 0 ; font-size:85% }
 #item dt:after { content:': ' }
 #item dd { grid-column-start:2 ; margin:2px 0 0 }
@@ -57,11 +53,13 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #item ul li { margin:0 ; overflow-wrap:anywhere }
 #item img { height:32px ; vertical-align:middle }
 
+#footer { clear:both ; text-align:center ; padding:6px ; background:#078b6c ; color:#fff }
+#footer img { width:90% ; max-width:330px ; border:0.3em outset }
+#footer a { color:#fff ; text-decoration:underline }
 
 
 
-
-/* Below are styles for mobile devices and other small screens */
+/* Below are additional styles for mobile devices and other small screens */
 
 @media screen and (max-width:800px) {
 
@@ -70,7 +68,8 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #search { width:100% ; float:none }
 
 #restoreSearch { position:sticky ; top:1.85em }
-#restoreSearch ul { font-weight:bold ; list-style-type:none ; xwidth:100% ; margin:2px 0 ; padding:3px 6px ; background:#078b6c ; color:#fff }
+#restoreSearch:hover { cursor:pointer }
+#restoreSearch ul { font-weight:bold ; list-style-type:none ; xwidth:100% ; margin:2px 0 ; padding:3px 6px ; background:#034536 ; color:#fff }
 #restoreSearch li { text-align:right }
 
 #browse ul { list-style-type:none ; width:100% ; padding-inline-start:0 }
@@ -81,7 +80,7 @@ h1 a { text-decoration:none ; color:#fff ! important }
 
 #results { width:100% ; float:none }
 
-#map { height:320px ; width:100% ; clear:both }
+#map { height:320px ; width:100% ; clear:both ; border-left:none ; border-right:none }
 
 #item { width:98% ; padding:0 1% ; float:none ; clear:both ; position:initial }
 

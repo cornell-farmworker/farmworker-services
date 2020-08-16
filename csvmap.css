@@ -45,7 +45,7 @@ h1 a { text-decoration:none ; color:#fff ! important }
 
 #item { width:35% ; padding:0 1% ; float:right }
 #item > h2 { margin:0 ; text-align:left ; font-size:120% ; font-weight:bold }
-#item dl { display:grid ; grid-template-columns:25% 75% ; margin:0 }
+#item dl { display:grid ; grid-template-columns:30% 70% ; margin:0 }
 #item dt { grid-column-start:1 ; color:#aaa ; text-align:right ; vertical-align:top ; margin:3px 4px 0 0 ; font-size:85% }
 #item dt:after { content:': ' }
 #item dd { grid-column-start:2 ; margin:2px 0 0 }

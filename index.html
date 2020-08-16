@@ -3,14 +3,21 @@
 <head>
 <title>Farmworker Service Directory</title>
 <script>
-  // default to Spanish version
-  window.location.replace('es.html');
+  var lang = navigator.language;
+  if (lang.startsWith('en')) {
+    window.location.replace('en.html');
+  }
+  else {
+    // default to Spanish version
+    window.location.replace('es.html');
+  }
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <link rel="stylesheet" href="csvmap.css">
 </head>
 
 <body>
+<!-- in case redirect above doesn't work -->
 <div id='home' style='margin-top:2em'>
   <a href='es.html'>Directorio de servicios para trabajadores agrícolas (español)</a>
   <br><br><br>

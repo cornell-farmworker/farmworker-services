@@ -19,12 +19,16 @@ h1 a { text-decoration:none ; color:#fff ! important }
 .awesomplete input { width:20em }
 .awesomplete mark { background:none ! important ; font-weight:bold }
 
-#home { background:#fff ; color:#000 ; text-align:center ; max-width:40em ; margin:0 auto }
+#home { background:#fff ; color:#000 ; text-align:center }
+#home * { max-width:40em ; margin:0 auto }
 #home img { width:100% ; max-width:400px }
 #home div { padding:1em }
 #home #goToSearch { font-size:150% }
 #home div.cfp { background:#078b6c ; color:#fff ; padding:3px 6px ; font-size:150% }
 #home div.cfp a { font-weight:bold ; text-decoration:underline ; color:#fff }
+
+#home .language { background:#034536 ; color:#fff ; padding:3px 6px ; max-width:100% ; text-align:right }
+.language a { color:#fff }
 
 #footer { clear:both ; text-align:center ; margin-top:1.5em ; padding:6px ; background:#078b6c ; color:#fff }
 #footer img { width:90% ; max-width:330px ; border:0.3em outset }

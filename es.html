@@ -14,6 +14,7 @@
 <script src="lib/leaflet-omnivore.min.js"></script>
 <script src="lib/leaflet-tilelayer-colorfilter.min.js"></script>
 <script src="lib/leaflet-fullscreen.min.js"></script>
+<script src="lib/leaflet-sleep.js"></script>
 <script src="lib/awesomplete.min.js"></script>
 <script src="lib/papaparse.min.js"></script>
 <script src="lib/mustache.min.js"></script>
@@ -22,25 +23,41 @@
 
 <body>
 
-<h1 id='title'><a href='index.html'>Farmworker Service Directory</a></h1>
+<h1 id='title'><a href='es.html'>Farmworker Service Directory</a></h1>
+
+<div id='home'>
+  <img src='image/cows-barn-400.png'>
+  <div>Bienvenido al Directorio de servicios para trabajadores agrícolas, un directorio estatal de recursos, en inglés y español, para trabajadores agrícolas e inmigrantes en todo el estado de Nueva York.</div>
+  <button id='browseButton'>Buscar en el directorio</button><br>
+  <div>La información de este directorio fue obtenida en abril de 2020, pero hay cambios frequentes.  Por favor, contacte a cada organización para obtener y verificar que la información sea lo más acutalizada antes de viajar a su ubicación.</div>
+</div>
 
 <div id='search'>
   <form id='searchform'>
-    Buscar servicios para trabajadores agrícolas en el estado de Nueva York:<br>
+    <b>Buscar servicios para trabajadores agrícolas en el estado de Nueva York:</b><br>
     <input id='q' placeholder='ciudad, condado, organización, o categoría' />
-    <button type='submit'>search</button>
+    <button type='submit'>buscar</button>
   </form>
-  <div id='home'></div>
-  <ul id='results'></ul>
 </div>
 
-<div id='info'></div>
+<div id='browse'></div>
+
+<div id='results'></div>
+
+<div id='item'></div>
 
 <div id='map'></div>
 
+<div id='footer'>
+  Creado y mantenido por<br>
+  <a href='https://cardi.cals.cornell.edu/programs/farmworker/'><img src='image/CFP-logo.jpg'></a><br>
+  (607) 254-5194<br>
+  <a href='mailto:farmworkers@cornell.edu'>farmworkers@cornell.edu</a>
+</div>
+
 <script>var lang='es';</script>
-<script src="csvmap-config.js"></script>
-<script src="csvmap.js"></script>
+<script src='csvmap-config.js'></script>
+<script src='csvmap.js'></script>
 
 </body>
 </html>

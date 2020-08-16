@@ -25,11 +25,11 @@ function gotLocationError(result) {
 var map = L.map('map', {
   fadeAnimation: false,
   fullscreenControl: true,
-
-  // sleep options (to prevent unwanted scrolling)
-  sleepTime:500,
-  wakeTime:1000
+  sleep: csvmap.mobile(), // activate sleep only when using a small screen
+  sleepTime: 500,
+  wakeTime: 1000
 });
+
 
 map.on('click', function(e) { console.log(e.latlng); });
 

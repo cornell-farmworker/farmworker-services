@@ -562,7 +562,7 @@ function show_results(q, results, showid) {
 
   if (csvmap.location) {
     var msg = csvmap.lang==='en' ?
-      'The nearest services are listed first.' :
+      'The services nearest to your location are listed first.' :
       'Los servicios más cercanos se enumeran primero.';
     resultsDiv.innerHTML = '<div>'+msg+'</div>';
   }

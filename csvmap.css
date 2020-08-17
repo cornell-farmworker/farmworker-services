@@ -91,7 +91,7 @@ h1 a { text-decoration:none ; color:#fff ! important }
 
 #results { width:100% ; float:none }
 
-#map { height:320px ; width:100% ; clear:both ; border-left:none ; border-right:none }
+#map { height:vh ; width:100vw ; clear:both ; border-left:none ; border-right:none }
 
 #item { width:98% ; padding:0 1% ; float:none ; clear:both ; position:initial }
 

@@ -54,7 +54,7 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #item img { height:32px ; vertical-align:middle }
 
 #footer { clear:both ; text-align:center ; padding:6px ; background:#078b6c ; color:#fff }
-#footer img { width:90% ; max-width:330px ; border:0.3em outset }
+#footer img { width:90% ; max-width:600px ; border:2px solid #000 }
 #footer a { color:#fff ; text-decoration:underline }
 
 

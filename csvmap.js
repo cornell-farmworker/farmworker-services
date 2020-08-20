@@ -152,6 +152,7 @@ function loadPoints() {
         csvmap.id2leafid[id] = i;
       }
 
+      document.getElementById('loading').style.display = 'none';
       interpretHash();
 
     })

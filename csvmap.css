@@ -12,14 +12,9 @@ button:hover { cursor:pointer }
 h1 { margin:0 ; font-size:135% ; font-weight:bold ; background:#078b6c ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
 h1 a { text-decoration:none ; color:#fff ! important }
 
-#search { float:float ; padding:0.5em 1% ; text-align:left ; display:none }
-#q { width:20em ; clear:left }
-.awesomplete { z-index:99999 ; font-family: Arial ; font-size:80% }
-.awesomplete > ul { transition:none ; background:rgba(255,255,255,1) }
-.awesomplete input { width:20em }
-.awesomplete mark { background:none ! important ; font-weight:bold }
+#loading { height:100% ; padding:2em ; text-align:center ; vertical-align:center ; font-weight:bold }
 
-#home { background:#fff ; color:#000 ; text-align:center }
+#home { background:#fff ; color:#000 ; text-align:center ; display:none }
 #home * { max-width:40em ; margin:0 auto }
 #home img { width:100% ; max-width:400px }
 #home div { padding:1em }
@@ -29,6 +24,13 @@ h1 a { text-decoration:none ; color:#fff ! important }
 
 #home .language { background:#034536 ; color:#fff ; padding:3px 6px ; max-width:100% ; text-align:right }
 .language a { color:#fff }
+
+#search { float:float ; padding:0.5em 1% ; text-align:left ; display:none }
+#q { width:20em ; clear:left }
+.awesomplete { z-index:99999 ; font-family: Arial ; font-size:80% }
+.awesomplete > ul { transition:none ; background:rgba(255,255,255,1) }
+.awesomplete input { width:20em }
+.awesomplete mark { background:none ! important ; font-weight:bold }
 
 #browse { clear:both }
 #browse > ul { font-weight:bold ; list-style-type:none ; margin:0 ; padding-left:0 ; padding-inline-start:0 }

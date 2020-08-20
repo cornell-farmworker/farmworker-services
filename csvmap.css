@@ -12,7 +12,7 @@ button:hover { cursor:pointer }
 h1 { margin:0 ; font-size:135% ; font-weight:bold ; background:#078b6c ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
 h1 a { text-decoration:none ; color:#fff ! important }
 
-#search { float:float ; padding:0.5em 1% ; text-align:left }
+#search { float:float ; padding:0.5em 1% ; text-align:left ; display:none }
 #q { width:20em ; clear:left }
 .awesomplete { z-index:99999 ; font-family: Arial ; font-size:80% }
 .awesomplete > ul { transition:none ; background:rgba(255,255,255,1) }
@@ -41,7 +41,7 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #results a { text-decoration:none ; color:#078b6c }
 #results a:hover, #results a:focus { text-decoration:underline ; color:#078b6c }
 
-#map { height:85% ; width:30% ; border:2px solid #000 }
+#map { height:85% ; width:30% ; border:2px solid #000 ; display:none }
 
 #item { width:35% ; padding:0 1% ; float:right }
 #item > h2 { margin:0 ; text-align:left ; font-size:120% ; font-weight:bold }
@@ -54,7 +54,7 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #item img { height:32px ; vertical-align:middle }
 
 #footer { clear:both ; text-align:center ; padding:6px ; background:#078b6c ; color:#fff }
-#footer img { width:90% ; max-width:600px ; border:2px solid #000 }
+#footer img { max-width:90% ; border:2px solid #000 }
 #footer a { color:#fff ; text-decoration:underline }
 
 

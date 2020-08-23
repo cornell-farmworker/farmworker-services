@@ -34,12 +34,12 @@ sort,category-en,subcategory-en,category-es,subcategory-es,icon1,icon2
 7.3,Labor,Career advice,Trabajo,Asesoramiento de carrera,noun_career_2317166.svg,noun_career_2252291.svg
 8,Programs for families,,Programas para familias,,noun_Family_2512276.svg,noun_Family_1107039.svg
 8.1,Programs for families,Childcare,Programas para familias,Centros para el cuidado de niños,noun_mother_2130453.svg,noun_Stroller_2844154.svg
-8.1,Victim support,Domestic violence,Apoyo para víctimas,Violencia domestica,noun_abuse_1784960.svg,noun_abuse_43499.svg
 8.2,Programs for families,Programs for kids,Programas para familias,Programas para niños,noun_Children_851499.svg,noun_playing_53408.svg
-8.2,Victim support,Victim services,Apoyo para víctimas,Servicios para víctimas,noun_victim_2314662.svg,noun_victim_1103352.svg
 8.3,Programs for families,Educational support,Programas para familias,Apoyo educativo,noun_education support_3239930.svg,noun_educational aid_2139201.svg
 8.4,Programs for families,Parenting support,Programas para familias,Apoyo para los padres,noun_parent_687561.svg,noun_parents_1967160.svg
 9,Victim support,,Apoyo para víctimas,,noun_helping disaster victim_2745322(1).svg,noun_fireman rescue victim_2758363.svg
+9.1,Victim support,Domestic violence,Apoyo para víctimas,Violencia domestica,noun_abuse_1784960.svg,noun_abuse_43499.svg
+9.2,Victim support,Victim services,Apoyo para víctimas,Servicios para víctimas,noun_victim_2314662.svg,noun_victim_1103352.svg
 10,Housing,,Vivienda,,noun_House_1723064.svg,noun_House_635832.svg
 10.1,Housing,Utility assistance,Vivienda,Asistencia para pagos de utilidad,noun_Home Electricity_2244814.svg,noun_Water Bill_420722.svg
 10.2,Housing,Affordable housing,Vivienda,Vivienda accesible,noun_affordable housing_2262867.svg,noun_affordability_2083153.svg

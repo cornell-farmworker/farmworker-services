@@ -1,6 +1,6 @@
 # Farmworker Services map
 
-https://kgjenkins.github.io/farmworker-services-map/
+https://cornell-farmworker.github.io/farmworker-services/
 
 A simple, searchable point map of Farmworker Services in New York State, powered by a CSV file.
 

@@ -88,7 +88,7 @@ var csvmap = {
   i18n: {
     'home-button': {
       'en': 'home',
-      'es': 'indicio'
+      'es': 'inicio'
     },
     'results-button': {
       'en': 'return to search results',

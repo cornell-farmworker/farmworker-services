@@ -4,7 +4,7 @@ window.addEventListener('hashchange', interpretHash, false);
 document.getElementById('modal').onclick = closeModal;
 document.getElementById('home-button').onclick = goHome;
 document.getElementById('results-button').onclick = returnToResults;
-document.getElementById('language-button').onclick = toggleLanguage;
+document.getElementById('language-button').onclick = switchLanguage;
 document.getElementById('search-form').onsubmit = submitSearch;
 document.onkeyup = function(e) {
   if (e.key=='Escape') {
@@ -305,9 +305,9 @@ function interpretHash() {
   var q = params[1];
   var id = params[2];
 
-  // default to spanish if lang isn't 'en' or 'es'
+  // default to config lang if lang isn't 'en' or 'es'
   if (! lang.match(/en|es/)) {
-    location.hash = '#es';
+    location.hash = '#' + csvmap.lang;
     return false;
   }
   setLanguage(lang);
@@ -356,7 +356,7 @@ function setLanguage(lang) {
 }
 
 
-function toggleLanguage(e) {
+function switchLanguage(e) {
   var b = e.target;
   b.blur();
   var lang = b.textContent.slice(0,2).toLowerCase();
@@ -473,7 +473,7 @@ function showItem(layer) {
 
 function returnToResults(e) {
   document.getElementById('results-button').style.display = 'none';
-  history.back();
+  location.hash = location.hash.replace(/\/\d+$/, '');
 }
 
 

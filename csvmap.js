@@ -31,7 +31,7 @@ var map = L.map('map', {
   sleep: csvmap.mobile(), // activate sleep only when using a small screen
   sleepTime: 500,
   wakeTime: 1000,
-  wakeMessage: csvmap.lang==='es' ? 'haga clic o coloque el cursor para despertar' : 'click or hover to wake'
+  wakeMessage: csvmap.i18n.wake[csvmap.lang]
 });
 
 
@@ -706,7 +706,6 @@ function showResults(q, results, showid) {
 
     resultsList.appendChild(li);
     if (id === showid) {
-      // TODO typing to modify the URL doesn't work
       a.focus();
     }
   }

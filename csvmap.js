@@ -473,7 +473,7 @@ function showItem(layer) {
 
 function returnToResults(e) {
   document.getElementById('results-button').style.display = 'none';
-  history.back();
+  location.hash = location.hash.replace(/\/\d+$/, '');
 }
 
 

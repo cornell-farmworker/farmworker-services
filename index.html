@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <title>Farmworker Service Directory</title>
+<script>
+  // set language based on browser settings, and hopefully prevent unnecessary auto-translation
+  document.documentElement.lang = (navigator.language.slice(0,2)==='en' ? 'en' : 'es');
+</script>
 <link rel="stylesheet" href="lib/leaflet.css" />
 <link rel="stylesheet" href="lib/awesomplete.css" />
 <link rel="stylesheet" href="lib/leaflet-fullscreen.css" />
@@ -62,7 +66,7 @@
 </div>
 
 <div id='modal'>
-  <div data-i18n='modal'>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<br><br>Haz click para continuar...</div>
+  <div data-i18n='modal'></div>
 </div>
 
 <script src='csvmap-config.js'></script>

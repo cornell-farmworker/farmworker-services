@@ -127,8 +127,11 @@ var customLayer = L.geoJson(null, {
         }
         if (v2.length>0) {
           feature.properties[p] = v2;
+
+          // add translated categories/subcategories
           if (p.match(/category/)) {
             feature.properties[p.replace(/-en/, '-es')] = v2es;
+            fulltext += ' ' + v2es.join('; ');
           }
         }
       }

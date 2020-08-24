@@ -12,7 +12,7 @@ button:active { border:none }
 
 #header { position:sticky ; z-index:20 ; top:0 }
 #nav { font-weight:bold ; width:100% ; margin:0 ; padding:0 ; background:#034536 ; color:#fff ; display:grid ; grid-template-columns:25% 50% 25% ; height:2.5em }
-#nav button { border-radius:0 ; border:0 ; background:#034546 ; padding:0.4em }
+#nav button { border-radius:0 ; border:0 ; background:#034536 ; padding:0.4em }
 
 #home-button { grid-column-start:1 ; text-align:left ; background:#f80 }
 #results-button { grid-column-start:2 ; display:none }

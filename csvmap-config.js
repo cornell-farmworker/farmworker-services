@@ -133,14 +133,10 @@ var csvmap = {
       'en': 'The services nearest to your location are listed first.',
       'es': 'Los servicios más cercanos se enumeran primero.'
     },
-    'lang2': {
-      'en': '',
-      'es': ''
-    },
-    'lang2': {
-      'en': '',
-      'es': ''
-    },
+    'wake': {
+      'en': 'click or hover to wake',
+      'es': 'haga clic o coloque el cursor para despertar'
+    }
   }
 }
 

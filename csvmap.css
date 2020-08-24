@@ -32,7 +32,7 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #search { display:none }
 #search-form { max-width:36em ; margin:0 auto 0.5em ; text-align:center }
 #q { width:20em ; clear:left }
-.awesomplete { z-index:10 ; font-family: Arial ; font-size:80% ; text-align:left }
+.awesomplete { z-index:999999 ; font-family: Arial ; font-size:80% ; text-align:left }
 .awesomplete > ul { transition:none ; background:rgba(255,255,255,1) }
 .awesomplete input { width:20em }
 .awesomplete mark { background:none ! important ; font-weight:bold }
@@ -65,7 +65,7 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #footer img { max-width:90% ; border:2px solid #000 }
 #footer a { color:#fff ; text-decoration:underline }
 
-#modal {  z-index:999999 ; position:fixed ; left:0 ; top:4.5em ; width:80% ; height:90% ; overflow:auto ; background:#078b6c ; color:#fff ; padding:20% 10% }
+#modal {  z-index:99999999 ; position:fixed ; left:0 ; top:4.5em ; width:80% ; height:90% ; overflow:auto ; background:#078b6c ; color:#fff ; padding:20% 10% }
 
 
 /* Below are additional styles for mobile devices and other small screens */

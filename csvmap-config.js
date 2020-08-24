@@ -2,7 +2,8 @@
 
 var csvmap = {
 
-  lang: 'es',
+  // default to english if that is the browser preference, otherwise spanish
+  lang: (navigator.language.slice(0,2) === 'en' ? 'en' : 'es'),
 
   // are we using a mobile or other device with a small screen?
   mobile: function() { return window.matchMedia('(max-width:800px)').matches },

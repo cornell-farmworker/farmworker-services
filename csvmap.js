@@ -1,8 +1,11 @@
 'use strict';
 
 window.addEventListener('hashchange', interpretHash, false);
-document.getElementById('searchform').onsubmit = submitSearch;
-document.getElementById('browseButton').onclick = show_browse;
+document.getElementById('modal').onclick = closeModal;
+document.getElementById('home-button').onclick = goHome;
+document.getElementById('results-button').onclick = returnToResults;
+document.getElementById('language-button').onclick = toggleLanguage;
+document.getElementById('search-form').onsubmit = submitSearch;
 document.onkeyup = function(e) {
   if (e.key=='Escape') {
     clearItem();
@@ -41,9 +44,9 @@ var osm = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/light_all/{
   opacity: 1,
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="https://carto.com/location-data-services/basemaps/">Carto</a>',
   filter: [
-    'brightness:65%',
+    'brightness:70%',
     'contrast:300%',
-    'saturate:100%'
+    'saturate:30%'
   ]
 }).addTo(map);
 
@@ -89,8 +92,8 @@ var customLayer = L.geoJson(null, {
         feature.properties[p] = v;;
       }
 
-      // add value to fulltext unless it is an unsearched field
-      if (csvmap.config.unsearched_fields.indexOf(p) == -1) {
+      // add value to fulltext if it is a searched field
+      if (csvmap.config.searched_fields.indexOf(p) > -1) {
         fulltext += v + ' ';
       }
 
@@ -98,26 +101,39 @@ var customLayer = L.geoJson(null, {
       if (csvmap.config.multivalue_fields.indexOf(p) > -1) {
         v = v.split(/;\s*/);
         var v2 = [];
+        var v2es = [];
         for (var vi=0; vi<v.length; vi++) {
           var v2v = v[vi].trim();
           if (v2v.length>0) {
             v2.push(v2v);
 
             // check for invalid categories/subcategories (en or es)
-            if (p=='category') {
+            if (p === 'category-en') {
               if (csvmap.categories.indexOf(v2v)===-1) {
-                console.log('record ' + feature.properties.id + ' has an invalid category: '+v2v);
+                console.log('record ' + feature.properties.id + ' has an invalid '+p+': '+v2v);
+              }
+              else {
+                v2es.push(csvmap.i18n[v2v].es);
               }
             }
-            else if (p=='subcategory') {
+            else if (p === 'subcategory-en') {
               if (csvmap.subcategories.indexOf(v2v)===-1) {
-                console.log('record ' + feature.properties.id + ' has an invalid subcategory: '+v2v);
+                console.log('record ' + feature.properties.id + ' has an invalid '+p+': '+v2v);
+              }
+              else {
+                v2es.push(csvmap.i18n[v2v].es);
               }
             }
           }
         }
         if (v2.length>0) {
           feature.properties[p] = v2;
+
+          // add translated categories/subcategories
+          if (p.match(/category/)) {
+            feature.properties[p.replace(/-en/, '-es')] = v2es;
+            fulltext += ' ' + v2es.join('; ');
+          }
         }
       }
 
@@ -125,7 +141,7 @@ var customLayer = L.geoJson(null, {
     }
     feature.properties._fulltext = fulltext;
     layer.bindTooltip(feature.properties[csvmap.config.name_field], {direction:'right'});
-    layer.on('click', function(e){ show_item(e.target); });
+    layer.on('click', function(e){ showItem(e.target); });
   }
 });
 
@@ -142,7 +158,7 @@ function loadPoints() {
       var layers = this.getLayers();
       console.log('loaded ' + layers.length + ' points from ' + csvmap.config.data_file);
       initAutocomplete(layers);
-      show_results('', search('')); // interpretHash won't display points unless we start by searching for everything
+      showResults('', search('')); // interpretHash won't display points unless we start by searching for everything
       buildBrowse();
 
       // index the internal leaflet ids to the table ids
@@ -152,7 +168,7 @@ function loadPoints() {
         csvmap.id2leafid[id] = i;
       }
 
-      document.getElementById('loading').style.display = 'none';
+      document.getElementById('loading').remove();
       interpretHash();
 
     })
@@ -161,7 +177,6 @@ function loadPoints() {
       console.log(x);
     })
     .addTo(map);
-
 }
 
 
@@ -205,6 +220,16 @@ function gotCategories(results) {
     var icon = 'image/icons/' + subcat_en.replace(/\W+/g, '-').toLowerCase() + '.svg';
     csvmap.icon[subcat_en] = icon;
     csvmap.icon[subcat_es] = icon;
+
+    // add cat/subcat to i18n list
+    csvmap.i18n[cat_en] = {
+      'en': cat_en,
+      'es': cat_es
+    }
+    csvmap.i18n[subcat_en] = {
+      'en': subcat_en,
+      'es': subcat_es
+    }
   }
   csvmap.categoryTree = tree;
   csvmap.categories = categories;
@@ -268,36 +293,83 @@ function initAutocomplete(layers) {
 
 
 function interpretHash() {
-  // automatically search for terms in the URL hash,
-  // so that links to specific searches or features can be shared by URL
-  // TODO only do this upon initial pageLoad?
+  // the location hash determines what to show
   var hash = location.hash;
-  console.log('interpret hash '+hash);
 
   // unescape hash
   hash = unescape(hash).replace(/\+/g, ' ');
 
+  // split hash into #lang/q/id
   var params = hash.split("/");
+  var lang = params[0].slice(1);
   var q = params[1];
   var id = params[2];
 
-  if (q === undefined || q === '') {
-    q = '';
-    id = hash.split('/')[2];
-    if (id === undefined) {
-      show_home();
-      return false;
-    }
+  // default to spanish if lang isn't 'en' or 'es'
+  if (! lang.match(/en|es/)) {
+    location.hash = '#es';
+    return false;
+  }
+  setLanguage(lang);
+
+  // #es or #en -- show home
+  if (q === undefined) {
+    showHome();
+    return false;
   }
 
+  // #es/ or #en/ -- search/browse by category
+  if (q === '') {
+    showBrowse();
+    return false;
+  }
+
+  // search for q (and optionally show item specified by id)
   document.title += ': ' + q + (id ? ' / ' + id : '');
   document.getElementById('q').value = q;
   document.getElementById('q').innerHTML = q;
-  show_results(q, search(q), id);
+  showResults(q, search(q), id);
 }
 
 
-function show_item(layer) {
+function closeModal() {
+  var m = document.getElementById('modal');
+  if (m) {
+    m.remove();
+  }
+}
+
+
+function setLanguage(lang) {
+  csvmap.lang = lang;
+  // look for all the i18n elements and set to the specified language
+  // (the text strings are set in csvmap-config.js)
+  var elements = document.querySelectorAll('[data-i18n]');
+  for (var i=0; i<elements.length; i++) {
+    var e = elements[i];
+    var k = e.dataset.i18n;
+    if (k.match(/-placeholder$/)) {
+      e.placeholder = csvmap.i18n[k][lang];
+    }
+    e.innerHTML = csvmap.i18n[k][lang];
+  }
+}
+
+
+function toggleLanguage(e) {
+  var b = e.target;
+  b.blur();
+  var lang = b.textContent.slice(0,2).toLowerCase();
+  if (lang=='en') {
+    location.hash = location.hash.replace(/^#es/, 'en');
+  }
+  else {
+    location.hash = location.hash.replace(/^#en/, 'es');
+  }
+}
+
+
+function showItem(layer) {
   // show item details for the layer feature
   clearItem();
   document.getElementById('item').style.display = 'block';
@@ -351,22 +423,39 @@ function show_item(layer) {
 
   }
 
+  // build the list of categories and subcategories for this item
+  var b = document.createElement('div');
+  var tree = csvmap.categoryTree.en;
+  var ul = document.createElement('ul');
+  for (var cat in tree) {
+    if (! p['category-en'].includes(cat)) continue;
+    var li = document.createElement('li');
+    var img = '<img src="' + csvmap.icon[cat] + '" /> ';
+    var catstr = csvmap.i18n[cat][csvmap.lang];
+    li.innerHTML = '<a href="#' + csvmap.lang + '/' + encodeHash(catstr) + '">' + img + catstr + '</a>';
+    ul.appendChild(li);
+    var ul2 = document.createElement('ul');
+    for (var i=0; i<tree[cat].length; i++) {
+      var sub = tree[cat][i];
+      if (! p['subcategory-en'].includes(sub)) continue;
+      var subli = document.createElement('li');
+      var substr = csvmap.i18n[sub][csvmap.lang];
+      subli.innerHTML = '<a href="#' + csvmap.lang + '/' + encodeHash(substr) + '">' + substr + '</a>';
+      ul2.appendChild(subli);
+    }
+    ul.appendChild(ul2);
+  }
+  b.append(ul);
+
+  p2['service-types'] = b.innerHTML;
+
   var html = Mustache.render(csvmap.config['template_' + csvmap.lang], p2);
   document.getElementById('item').innerHTML = html;
 
   if (csvmap.mobile()) {
-    var s = document.getElementById('search')
     document.getElementById('search').style.display = 'none';
     document.getElementById('results').style.display = 'none';
-    var rs = document.getElementById('restoreSearch');
-    if (rs) {
-      rs.remove();
-    }
-    var d = document.createElement('div');
-    d.id = 'restoreSearch';
-    d.innerHTML = '<ul><li>Return to search results</li></ul>';
-    document.getElementById('title').after(d);
-    document.getElementById('restoreSearch').addEventListener('click', restoreSearch);
+    document.getElementById('results-button').style.display = 'block';
   }
   window.scrollTo(0,0);
 
@@ -381,19 +470,10 @@ function show_item(layer) {
   });
 }
 
-function goToSearch() {
-  console.log('goToSearch');
-  document.getElementById('search').style.display = 'block';
-  document.getElementById('browse').style.display = 'block';
-  document.getElementById('home').style.display = 'none';
-}
 
-
-function restoreSearch() {
-  document.getElementById('search').style.display = 'block';
-  document.getElementById('results').style.display = 'block';
-  clearItem();
-  document.getElementById('restoreSearch').remove();
+function returnToResults(e) {
+  document.getElementById('results-button').style.display = 'none';
+  history.back();
 }
 
 
@@ -412,37 +492,46 @@ function clearItem() {
   });
 }
 
-function clearResults() {
-  document.getElementById('results').innerHTML = '';
-  var rs = document.getElementById('restoreSearch');
-  if (rs) {
-    rs.remove();
-  }
-}
 
 function encodeHash(h) {
-  // replace slashes with . and keep + : =
+  // replace slashes with period, parens with space and keep + : =
   if (typeof(h)==='undefined') {
     h = '';
   }
-  h = escape(h.replace(/\//g, '.'))
+  h = escape(h.replace(/\//g, '.').replace(/[()]+/g, ' '))
     .replace(/%20/g, '+')
     .replace(/%3A/g, ':')
     .replace(/%3D/g, '=');
   return h;
 }
 
-function show_home() {
+function goHome(e) {
+  if (e.target) {
+    e.target.blur();
+  }
+  closeModal();
+  location.hash = csvmap.lang;
+}
+
+function showHome() {
   document.getElementById('home').style.display = 'block';
   document.getElementById('search').style.display = 'none';
   document.getElementById('browse').style.display = 'none';
   document.getElementById('results').style.display = 'none';
+  document.getElementById('results-button').style.display = 'none';
+  document.getElementById('item').style.display = 'none';
   document.getElementById('map').style.display = 'none';
 }
 
-function show_browse() {
+function goBrowse(e) {
+  location.hash = csvmap.lang + '/';
+}
+
+function showBrowse() {
+  buildBrowse();
   document.getElementById('home').style.display = 'none';
   document.getElementById('search').style.display = 'block';
+  document.getElementById('q').value = '';
   document.getElementById('browse').style.display = 'block';
   document.getElementById('results').style.display = 'none';
   document.getElementById('item').style.display = 'none';
@@ -458,13 +547,13 @@ function buildBrowse() {
   for (var cat in tree) {
     var li = document.createElement('li');
     var img = '<img src="' + csvmap.icon[cat] + '" /> ';
-    li.innerHTML = '<a href="#/' + encodeHash(cat) + '">' + img + cat + '</a>';
+    li.innerHTML = '<a href="#' + csvmap.lang + '/' + encodeHash(cat) + '">' + img + cat + '</a>';
     ul.appendChild(li);
     var ul2 = document.createElement('ul');
     for (var i=0; i<tree[cat].length; i++) {
       var sub = tree[cat][i];
       var subli = document.createElement('li');
-      subli.innerHTML = '<a href="#/' + encodeHash(sub) + '">' + sub + '</a>';
+      subli.innerHTML = '<a href="#' + csvmap.lang + '/' + encodeHash(sub) + '">' + sub + '</a>';
       ul2.appendChild(subli);
     }
     ul.appendChild(ul2);
@@ -476,9 +565,9 @@ function submitSearch(e) {
   e.preventDefault();
   e.returnValue = '';
   var q = document.getElementById('q').value.trim();
-  location.hash = '/' + encodeHash(q);
+  location.hash = csvmap.lang + '/' + encodeHash(q);
   document.title = csvmap.config.title + ': ' + q;
-  show_results(q, search(q));
+  showResults(q, search(q));
   return false;
 }
 
@@ -546,7 +635,7 @@ function clearMap() {
   }
 }
 
-function show_results(q, results, showid) {
+function showResults(q, results, showid) {
   // reset results
   document.getElementById('home').style.display = 'none';
   document.getElementById('search').style.display = 'block';
@@ -555,16 +644,14 @@ function show_results(q, results, showid) {
   document.getElementById('item').style.display = 'none';
   document.getElementById('map').style.display = 'block';
   clearMap();
-  clearResults();
   clearItem();
   window.scrollTo(0,0);
 
   var resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
 
   if (csvmap.location) {
-    var msg = csvmap.lang==='en' ?
-      'The services nearest to your location are listed first.' :
-      'Los servicios más cercanos se enumeran primero.';
+    var msg = csvmap.i18n.nearest[csvmap.lang];
     resultsDiv.innerHTML = '<div>'+msg+'</div>';
   }
 
@@ -591,7 +678,7 @@ function show_results(q, results, showid) {
     var id = item.feature.properties.id;
     var name = item.feature.properties[csvmap.config.name_field];
     var li = document.createElement('li');
-    li.innerHTML = '<a href="#/' + encodeHash(q) + '/' + encodeHash(id) + '">'+name+'</a>';
+    li.innerHTML = '<a href="#' + csvmap.lang + '/' + encodeHash(q) + '/' + encodeHash(id) + '">'+name+'</a>';
     var a = li.firstChild;
 
     // link to marker on map
@@ -606,7 +693,7 @@ function show_results(q, results, showid) {
     }
     a.onclick = function(e){
       var id = e.target.getAttribute('data');
-      show_item(layers[csvmap.id2leafid[id]]);
+      showItem(layers[csvmap.id2leafid[id]]);
 
       var ll = item.getLatLng();
       if (ll.lat != 0 || ll.lng != 0) {
@@ -625,7 +712,7 @@ function show_results(q, results, showid) {
   }
   // automatically show details if there is only one match
   if (resultsList.childNodes.length == 1) {
-    show_item(lastMatch);
+    showItem(lastMatch);
   }
 
   // pad the bounds by 10% so that points aren't right on the edge of the map

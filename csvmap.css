@@ -8,8 +8,18 @@ body { font-family:"Segoe UI", Roboto, Arial, sans-serif ; margin:0 }
 
 button { background:#078b6c ; color:#fff ; border:none ; border-radius:0.8em ; padding:0.5em 1em }
 button:hover { cursor:pointer }
+button:active { border:none }
 
-h1 { margin:0 ; font-size:135% ; font-weight:bold ; background:#078b6c ; color:#fff ; padding:3px 6px ; position:sticky ; z-index:99999999 ; top:0 }
+#header { position:sticky ; z-index:20 ; top:0 }
+#nav { font-weight:bold ; width:100% ; margin:0 ; padding:0 ; background:#034536 ; color:#fff ; display:grid ; grid-template-columns:25% 50% 25% ; height:2.5em }
+#nav button { border-radius:0 ; border:0 ; background:#034546 ; padding:0.4em }
+
+#home-button { grid-column-start:1 ; text-align:left ; background:#f80 }
+#results-button { grid-column-start:2 ; display:none }
+#language-button { grid-column-start:3 ; text-align:right }
+
+
+h1 { margin:0 ; font-size:135% ; font-weight:bold ; background:#078b6c ; color:#fff ; padding:3px 6px }
 h1 a { text-decoration:none ; color:#fff ! important }
 
 #loading { height:100% ; padding:2em ; text-align:center ; vertical-align:center ; font-weight:bold }
@@ -17,22 +27,17 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #home { background:#fff ; color:#000 ; text-align:center ; display:none }
 #home * { max-width:40em ; margin:0 auto }
 #home img { width:100% ; max-width:400px }
-#home div { padding:1em }
-#home #goToSearch { font-size:150% }
-#home div.cfp { background:#078b6c ; color:#fff ; padding:3px 6px ; font-size:150% }
-#home div.cfp a { font-weight:bold ; text-decoration:underline ; color:#fff }
+#home div { padding:0.7em }
 
-#home .language { background:#034536 ; color:#fff ; padding:3px 6px ; max-width:100% ; text-align:right }
-.language a { color:#fff }
-
-#search { float:float ; padding:0.5em 1% ; text-align:left ; display:none }
+#search { display:none }
+#search-form { max-width:36em ; margin:0 auto 0.5em ; text-align:center }
 #q { width:20em ; clear:left }
-.awesomplete { z-index:99999 ; font-family: Arial ; font-size:80% }
+.awesomplete { z-index:10 ; font-family: Arial ; font-size:80% ; text-align:left }
 .awesomplete > ul { transition:none ; background:rgba(255,255,255,1) }
 .awesomplete input { width:20em }
 .awesomplete mark { background:none ! important ; font-weight:bold }
 
-#browse { clear:both }
+#browse { margin:0 auto ; max-width:26em }
 #browse > ul { font-weight:bold ; list-style-type:none ; margin:0 ; padding-left:0 ; padding-inline-start:0 }
 #browse > ul > li { width:100% }
 #browse > ul > ul { font-weight:normal ; margin-left:2em }
@@ -54,11 +59,13 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #item ul { margin:0 ; padding:0 ; list-style-type:none }
 #item ul li { margin:0 ; overflow-wrap:anywhere }
 #item img { height:32px ; vertical-align:middle }
+#item dd ul ul { margin-left:4em ; list-style-type:circle }
 
 #footer { clear:both ; text-align:center ; padding:6px ; background:#078b6c ; color:#fff }
 #footer img { max-width:90% ; border:2px solid #000 }
 #footer a { color:#fff ; text-decoration:underline }
 
+#modal {  z-index:999999 ; position:fixed ; left:0 ; top:4.5em ; width:80% ; height:90% ; overflow:auto ; background:#078b6c ; color:#fff ; padding:20% 10% }
 
 
 /* Below are additional styles for mobile devices and other small screens */
@@ -79,23 +86,23 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #home img:nth-of-type(3) { display:none }
 
 #search { width:100% ; float:none }
+#search-form { width:95% ; margin:0 auto 0.5em }
+#search-form button { margin-top:0.3em }
 
-#restoreSearch { position:sticky ; top:1.85em }
-#restoreSearch:hover { cursor:pointer }
-#restoreSearch ul { font-weight:bold ; list-style-type:none ; xwidth:100% ; margin:2px 0 ; padding:3px 6px ; background:#034536 ; color:#fff }
-#restoreSearch li { text-align:right }
-
-#browse ul { list-style-type:none ; width:100% ; padding-inline-start:0 }
+#browse ul { clear:both ; list-style-type:none ; width:100% ; padding-inline-start:0 }
 #browse > ul > li { background:#ddd }
 #browse > ul > ul { margin-left:0 }
 #browse li { border-top:2px solid #fff }
 #browse > ul > ul > li { padding-left:2em ; background:#eee }
 
-#results { width:100% ; float:none }
+#results { width:98% ; float:none }
+#results ul { list-style-type:none ; width:100% ; padding-inline-start:0 }
+#results > ul > li { background:#ddd }
+#results li { border-top:2px solid #fff ; padding:2px 1% }
 
-#map { height:50vh ; width:100vw ; clear:both ; border-left:none ; border-right:none }
+#map { height:50vh ; width:96vw ; clear:both ; border-left:none ; border-right:none }
 
-#item { width:98% ; padding:0 1% ; float:none ; clear:both ; position:initial }
+#item { width:98% ; padding:0.5em 1% ; float:none ; clear:both ; position:initial }
 
 }
 

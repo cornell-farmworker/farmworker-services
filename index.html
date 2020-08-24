@@ -1,28 +1,72 @@
 <html>
 
 <head>
+<meta charset="utf-8" />
 <title>Farmworker Service Directory</title>
-<script>
-  var lang = navigator.language;
-  if (lang.startsWith('en')) {
-    window.location.replace('en.html');
-  }
-  else {
-    // default to Spanish version
-    window.location.replace('es.html');
-  }
-</script>
+<link rel="stylesheet" href="lib/leaflet.css" />
+<link rel="stylesheet" href="lib/awesomplete.css" />
+<link rel="stylesheet" href="lib/leaflet-fullscreen.css" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <link rel="stylesheet" href="csvmap.css">
+
+<script src="lib/leaflet.js"></script>
+<script src="lib/leaflet-omnivore.min.js"></script>
+<script src="lib/leaflet-tilelayer-colorfilter.min.js"></script>
+<script src="lib/leaflet-fullscreen.min.js"></script>
+<script src="lib/leaflet-sleep.js"></script>
+<script src="lib/awesomplete.min.js"></script>
+<script src="lib/papaparse.min.js"></script>
+<script src="lib/mustache.min.js"></script>
+<script src="lib/cheap-ruler.min.js"></script>
 </head>
 
 <body>
-<!-- in case redirect above doesn't work -->
-<div id='home' style='margin-top:2em'>
-  <a href='es.html'>Directorio de servicios para trabajadores agrícolas (español)</a>
-  <br><br><br>
-  <a href='en.html'>Farmworker service directory (English)</a>
-</div>
-</body>
 
+<div id='header'>
+  <h1 id='title'>Farmworker Service Directory</h1>
+  <div id='nav'>
+    <button id='home-button' data-i18n='home-button'>home</button>
+    <button id='results-button' data-i18n='results-button'>return to search results</button>
+    <button id='language-button' data-i18n='switch-button'>español</button>
+  </div>
+  <div id='loading'>cargando/loading...</div>
+</div>
+
+<div id='home' data-i18n='home'></div>
+
+<div id='search'>
+  <form id='search-form'>
+    <b data-i18n='search-text'>Search for services in New York State:</b><br>
+    <input id='q' placeholder='city, county, organization, or category' data-i18n='search-placeholder' />
+    <button id='search-button' data-i18n='search-button' type='submit'>search</button>
+  </form>
+</div>
+
+<div id='browse'></div>
+
+<div id='results'>
+  <div data-i18n='nearest'>nearest first...</div>
+</div>
+
+<div id='item'></div>
+
+<div id='map'></div>
+
+<div id='footer'>
+  <div data-i18n='produced'>Produced by:</div>
+  <a href='https://cardi.cals.cornell.edu/programs/farmworker/'><img src='image/CFP-logo-600.jpg' srcset='image/CFP-logo-300.jpg 300w, image/CFP-logo-600.jpg 600w' sizes='(max-width:800px) 300px, 600px'></a><br>
+  (607) 254-5194<br>
+  (607) 224-8821<br>
+  <a href='mailto:farmworkers@cornell.edu'>farmworkers@cornell.edu</a>
+</div>
+
+<div id='modal'>
+  <div data-i18n='modal'>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<br><br>Haz click para continuar...</div>
+</div>
+
+<script src='csvmap-config.js'></script>
+<script src='csvmap.js'></script>
+
+</body>
 </html>

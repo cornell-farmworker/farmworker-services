@@ -1,6 +1,12 @@
 'use strict';
 
 var csvmap = {
+
+  lang: 'es',
+
+  // are we using a mobile or other device with a small screen?
+  mobile: function() { return window.matchMedia('(max-width:800px)').matches },
+
   config: {
     title: 'Farmworker Service Directory',
 
@@ -8,22 +14,24 @@ var csvmap = {
     categories_file: 'data/categories.csv',
 
     //data_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1785004179&single=true&output=csv',
-    data_file: 'data/english.csv',
+    data_file: 'data/services.csv',
 
     name_field: 'organization',
     lon_field: 'longitude',
     lat_field: 'latitude',
-    multivalue_fields: [ 'category', 'subcategory', 'email', 'website' ],
+    multivalue_fields: [ 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'email', 'website-en', 'website-es' ],
 
     // all linked_fields should also be listed in multivalue_fields above
-    linked_fields: [ 'email', 'website' ],
+    linked_fields: [ 'email', 'website-en', 'website-es' ],
 
-    autocomplete_fields: [ 'category', 'subcategory', 'city', 'county', 'organization' ],
-    unsearched_fields: [ 'address', 'address2', 'internal-note', 'notes', 'notes-internal', 'amy-notes' ],
+    autocomplete_fields: [ 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'city', 'county', 'organization' ],
+    searched_fields: [ 'county', 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'organization', 'city', 'zipcode' ],
+    //bilingual_fields: [ 'website', 'hours', 'transportation', 'translation', 'bilingual', 'documents', 'citizenship', 'cost' ],
+
     template_en: `
       <h2>{{organization}}</h2>
       <dl>
-        {{#website}}<dt>Website</dt><dd>{{{website}}}</dd>{{/website}}
+        {{#website-en}}<dt>Website</dt><dd>{{{website-en}}}</dd>{{/website-en}}
         <dt>Address</dt>
         <dd>{{address}},
           {{#address2}}{{address2}}, {{/address2}}
@@ -37,21 +45,20 @@ var csvmap = {
         {{#phone}}<dt>Phone</dt><dd>{{phone}}</dd>{{/phone}}
         {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}
         {{#email}}<dt>Contact</dt><dd>{{{email}}}</dd>{{/email}}
-        {{#hours}}<dt>Hours</dt><dd>{{hours}}</dd>{{/hours}}
-        {{#transportation}}<dt>Transportation</dt><dd>{{transportation}}</dd>{{/transportation}}
-        {{#translation}}<dt>Translation</dt><dd>{{translation}}</dd>{{/translation}}
-        {{#bilingual}}<dt>Bilingual</dt><dd>{{bilingual}}</dd>{{/bilingual}}
-        {{#documents}}<dt>Required documents</dt><dd>{{documents}}</dd>{{/documents}}
-        {{#citizenship}}<dt>Citizenship</dt><dd>{{citizenship}}</dd>{{/citizenship}}
-        {{#cost}}<dt>Cost</dt><dd>{{cost}}</dd>{{/cost}}
-        {{#category}}<dt>Category</dt><dd>{{{category}}}</dd>{{/category}}
-        {{#subcategory}}<dt>Subcategory</dt><dd>{{{subcategory}}}</dd>{{/subcategory}}
+        {{#hours-en}}<dt>Hours</dt><dd>{{hours-en}}</dd>{{/hours-en}}
+        {{#transportation-en}}<dt>Transportation</dt><dd>{{transportation-en}}</dd>{{/transportation-en}}
+        {{#translation-en}}<dt>Translation</dt><dd>{{translation-en}}</dd>{{/translation-en}}
+        {{#bilingual-en}}<dt>Bilingual</dt><dd>{{bilingual-en}}</dd>{{/bilingual-en}}
+        {{#documents-en}}<dt>Required documents</dt><dd>{{documents-en}}</dd>{{/documents-en}}
+        {{#citizenship-en}}<dt>Citizenship</dt><dd>{{citizenship-en}}</dd>{{/citizenship-en}}
+        {{#cost-en}}<dt>Cost</dt><dd>{{cost-en}}</dd>{{/cost-en}}
+        {{#service-types}}<dt>Types of services</dt><dd>{{{service-types}}}</dd>{{/service-types}}
       </dl>
     `,
     template_es: `
       <h2>{{organization}}</h2>
       <dl>
-        {{#website}}<dt>Sitio web</dt><dd>{{{website}}}</dd>{{/website}}
+        {{#website-es}}<dt>Sitio web</dt><dd>{{{website-es}}}</dd>{{/website-es}}
         <dt>Dirección</dt>
         <dd>{{address}},
           {{#address2}}{{address2}}, {{/address2}}
@@ -65,84 +72,75 @@ var csvmap = {
         {{#phone}}<dt>Teléfono</dt><dd>{{phone}}</dd>{{/phone}}
         {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}
         {{#email}}<dt>Contacto</dt><dd>{{{email}}}</dd>{{/email}}
-        {{#hours}}<dt>Horrario</dt><dd>{{hours}}</dd>{{/hours}}
-        {{#transportation}}<dt>Transportación</dt><dd>{{transportation}}</dd>{{/transportation}}
-        {{#translation}}<dt>Interpretación</dt><dd>{{translation}}</dd>{{/translation}}
-        {{#bilingual}}<dt>Bilingüe</dt><dd>{{bilingual}}</dd>{{/bilingual}}
-        {{#documents}}<dt>Documentos requeridos</dt><dd>{{documents}}</dd>{{/documents}}
-        {{#citizenship}}<dt>Ciudadanía</dt><dd>{{citizenship}}</dd>{{/citizenship}}
-        {{#cost}}<dt>Costos</dt><dd>{{cost}}</dd>{{/cost}}
-        {{#category}}<dt>Categoría</dt><dd>{{{category}}}</dd>{{/category}}
-        {{#subcategory}}<dt>Subcategoría</dt><dd>{{{subcategory}}}</dd>{{/subcategory}}
+        {{#hours-es}}<dt>Horrario</dt><dd>{{hours-es}}</dd>{{/hours-es}}
+        {{#transportation-es}}<dt>Transportación</dt><dd>{{transportation-es}}</dd>{{/transportation-es}}
+        {{#translation-es}}<dt>Interpretación</dt><dd>{{translation-es}}</dd>{{/translation-es}}
+        {{#bilingual-es}}<dt>Bilingüe</dt><dd>{{bilingual-es}}</dd>{{/bilingual-es}}
+        {{#documents-es}}<dt>Documentos requeridos</dt><dd>{{documents-es}}</dd>{{/documents-es}}
+        {{#citizenship-es}}<dt>Ciudadanía</dt><dd>{{citizenship-es}}</dd>{{/citizenship-es}}
+        {{#cost-es}}<dt>Costos</dt><dd>{{cost-es}}</dd>{{/cost-es}}
+        {{#service-types}}<dt>Tipos de servicios</dt><dd>{{{service-types}}}</dd>{{/service-types}}
       </dl>
-    `,
-    labels: {
-      'en': {
-        'county': 'County',
-        'category': 'Category',
-        'subcategory': 'Subcategory',
-        'organization': 'Organization',
-        'address': 'Address',
-        'address2': 'Address2',
-        'pobox': 'POBox',
-        'city': 'City',
-        'state': 'State',
-        'zipcode': 'Zipcode',
-        'longitude': 'Longitude',
-        'latitude': 'Latitude',
-        'phone': 'Phone',
-        'fax': 'Fax',
-        'email': 'Electronic contact',
-        'website': 'Website',
-        'hours': 'Hours',
-        'transportation': 'Transportation',
-        'translation': 'Translation',
-        'bilingual': 'Bilingual',
-        'documents': 'Documents',
-        'citizenship': 'Citizenship',
-        'cost': 'Cost',
-        'notes': 'Notes'
-      },
-      'es': {
-        'county': 'Condado',
-        'category': 'Categoría',
-        'subcategory': 'Subcategoría',
-        'organization': 'Organización',
-        'address': 'Dirección',
-        'address2': 'Dirección2',
-        'pobox': 'Apartado',
-        'city': 'Ciudad',
-        'state': 'Estado',
-        'zipcode': 'Código postal',
-        'longitude': 'Longitud',
-        'latitude': 'Latitud',
-        'phone': 'Teléfono',
-        'fax': 'Fax',
-        'email': 'Correo electronico',
-        'website': 'Sitio web',
-        'hours': 'Horrario',
-        'transportation': 'Transportación',
-        'translation': 'Interpretación',
-        'bilingual': 'Bilingüe',
-        'documents': 'Documentos',
-        'citizenship': 'Ciudadanía',
-        'cost': 'Costos',
-        'notes': 'Apuntos'
-      }
-    }
+    `
+  },
+
+  i18n: {
+    'home-button': {
+      'en': 'home',
+      'es': 'indicio'
+    },
+    'results-button': {
+      'en': 'return to search results',
+      'es': 'volver a los resultados de la búsqueda'
+    },
+    'switch-button': {
+      'en': 'español',
+      'es': 'English'
+    },
+    'home': {
+      'en': `
+        <div>Welcome the Farmworker Service Directory, a statewide directory of resources, in English and <a href='#es'>Spanish</a>, for farmworkers and immigrants across New York State.</div>
+        <button id='browse-button' onclick='goBrowse();'>Click here to search the directory</button><br>
+        <div>The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.</div>
+      `,
+      'es': `
+        <div>Bienvenido/a al mapa de directorio en todo el estado de Nueva York que contiene servicios disponibles para los trabajadores agrícolas e inmigrantes, en <a href='#en'>inglés</a> y español.</div>
+        <button id='browse-button' onclick='goBrowse();'>Clic aquí para buscar directorio</button><br>
+        <div>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.</div>
+      `
+    },
+    'modal': {
+      'en': 'The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.<br><br>Click to continue...',
+      'es': 'La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<br><br>Haz click para continuar...'
+    },
+    'search-text': {
+      'en': 'Search for services in New York State:',
+      'es': 'Buscar servicios para trabajadores agrícolas en el estado de Nueva York:'
+    },
+    'search-placeholder': {
+      'en': 'city, county, organization, or category',
+      'es': 'ciudad, condado, organización, o categoría'
+    },
+    'search-button': {
+      'en': 'search',
+      'es': 'buscar'
+    },
+    'produced': {
+      'en': 'Produced by:',
+      'es': 'Producido por:'
+    },
+    'nearest': {
+      'en': 'The services nearest to your location are listed first.',
+      'es': 'Los servicios más cercanos se enumeran primero.'
+    },
+    'lang2': {
+      'en': '',
+      'es': ''
+    },
+    'lang2': {
+      'en': '',
+      'es': ''
+    },
   }
-}
-
-csvmap.lang = lang;
-
-if (lang=='es') {
-  // espanol
-  //csvmap.config.data_file = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1985522431&single=true&output=csv';
-  csvmap.config.data_file = 'data/spanish.csv';
-}
-
-// are we using a mobile or other device with a small screen?
-csvmap.mobile = function() {
-  return window.matchMedia('(max-width:800px)').matches;
 }
 

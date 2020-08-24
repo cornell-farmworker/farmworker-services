@@ -1,5 +1,7 @@
 'use strict';
 
+setLanguage(csvmap.lang);
+
 window.addEventListener('hashchange', interpretHash, false);
 document.getElementById('modal').onclick = closeModal;
 document.getElementById('home-button').onclick = goHome;

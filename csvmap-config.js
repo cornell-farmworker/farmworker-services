@@ -109,6 +109,10 @@ var csvmap = {
         <div>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.</div>
       `
     },
+    'modal': {
+      'en': 'The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.<br><br>Click to continue...',
+      'es': 'La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<br><br>Haz click para continuar...'
+    },
     'search-text': {
       'en': 'Search for services in New York State:',
       'es': 'Buscar servicios para trabajadores agrícolas en el estado de Nueva York:'

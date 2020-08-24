@@ -1,6 +1,7 @@
 'use strict';
 
 window.addEventListener('hashchange', interpretHash, false);
+document.getElementById('modal').onclick = closeModal;
 document.getElementById('home-button').onclick = goHome;
 document.getElementById('results-button').onclick = returnToResults;
 document.getElementById('language-button').onclick = toggleLanguage;
@@ -176,7 +177,6 @@ function loadPoints() {
       console.log(x);
     })
     .addTo(map);
-
 }
 
 
@@ -330,6 +330,15 @@ function interpretHash() {
   document.getElementById('q').innerHTML = q;
   showResults(q, search(q), id);
 }
+
+
+function closeModal() {
+  var m = document.getElementById('modal');
+  if (m) {
+    m.remove();
+  }
+}
+
 
 function setLanguage(lang) {
   csvmap.lang = lang;
@@ -500,6 +509,7 @@ function goHome(e) {
   if (e.target) {
     e.target.blur();
   }
+  closeModal();
   location.hash = csvmap.lang;
 }
 

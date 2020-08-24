@@ -485,11 +485,11 @@ function clearItem() {
 
 
 function encodeHash(h) {
-  // replace slashes with . and keep + : =
+  // replace slashes with period, parens with space and keep + : =
   if (typeof(h)==='undefined') {
     h = '';
   }
-  h = escape(h.replace(/\//g, '.'))
+  h = escape(h.replace(/\//g, '.').replace(/[()]+/g, ' '))
     .replace(/%20/g, '+')
     .replace(/%3A/g, ':')
     .replace(/%3D/g, '=');

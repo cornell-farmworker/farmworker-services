@@ -135,8 +135,8 @@ var csvmap = {
       'es': 'Los servicios más cercanos se enumeran primero.'
     },
     'wake': {
-      'en': 'click or hover to wake',
-      'es': 'haga clic o coloque el cursor para despertar'
+      'en': 'click to wake the map',
+      'es': 'haga clic para activar el mapa'
     }
   }
 }

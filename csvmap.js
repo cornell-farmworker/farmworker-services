@@ -32,10 +32,13 @@ var map = L.map('map', {
   fullscreenControl: true,
   sleep: csvmap.mobile(), // activate sleep only when using a small screen
   sleepTime: 500,
-  wakeTime: 1000,
-  wakeMessage: csvmap.i18n.wake[csvmap.lang]
+  wakeTime: 1000
 });
 
+if (csvmap.mobile()) {
+  // put map sleep note at top
+  map.sleep.sleepNote.style.top = 0;
+}
 
 // use a openstreetmap basemap
 var osm = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -363,6 +366,10 @@ function setLanguage(lang) {
       e.placeholder = csvmap.i18n[k][lang];
     }
     e.innerHTML = csvmap.i18n[k][lang];
+  }
+  // reset the map sleep note
+  if (map) {
+    map.sleep.sleepNote.innerHTML = csvmap.i18n.wake[lang];
   }
 }
 

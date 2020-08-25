@@ -10,7 +10,7 @@ button { background:#078b6c ; color:#fff ; border:none ; border-radius:0.8em ; p
 button:hover { cursor:pointer }
 button:active { border:none }
 
-#header { position:sticky ; z-index:20 ; top:0 }
+#header { position:sticky ; z-index:9999999 ; top:0 }
 #nav { font-weight:bold ; width:100% ; margin:0 ; padding:0 ; background:#034536 ; color:#fff ; display:grid ; grid-template-columns:25% 50% 25% ; height:2.5em }
 #nav button { border-radius:0 ; border:0 ; background:#034536 ; padding:0.4em }
 

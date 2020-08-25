@@ -697,6 +697,11 @@ function showResults(q, results, showid) {
     var name = item.feature.properties[csvmap.config.name_field];
     var li = document.createElement('li');
     li.innerHTML = '<a href="#' + csvmap.lang + '/' + encodeHash(q) + '/' + encodeHash(id) + '">'+name+'</a>';
+    var dist = item.feature.properties.csvmapdist;
+    if (dist) {
+      // add 25% to straight-line distance to approximate driving distance
+      li.innerHTML += '<br>~' + Math.round(dist*1.25) + ' miles away';
+    }
     var a = li.firstChild;
 
     // link to marker on map

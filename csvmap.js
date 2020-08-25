@@ -368,7 +368,7 @@ function setLanguage(lang) {
     e.innerHTML = csvmap.i18n[k][lang];
   }
   // reset the map sleep note
-  if (map && map.sleep) {
+  if (map && map.sleep && map.sleep.sleepNote) {
     map.sleep.sleepNote.innerHTML = csvmap.i18n.wake[lang];
   }
 }

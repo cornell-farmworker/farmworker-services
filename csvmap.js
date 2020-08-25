@@ -32,12 +32,13 @@ var map = L.map('map', {
   fullscreenControl: true,
   sleep: csvmap.mobile(), // activate sleep only when using a small screen
   sleepTime: 500,
-  wakeTime: 1000,
-  wakeMessage: csvmap.i18n.wake[csvmap.lang]
+  wakeTime: 1000
 });
 
-
-map.on('click', function(e) { console.log(e.latlng); });
+if (csvmap.mobile()) {
+  // put map sleep note at top
+  map.sleep.sleepNote.style.top = 0;
+}
 
 // use a openstreetmap basemap
 var osm = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -143,9 +144,20 @@ var customLayer = L.geoJson(null, {
     }
     feature.properties._fulltext = fulltext;
     layer.bindTooltip(feature.properties[csvmap.config.name_field], {direction:'right'});
-    layer.on('click', function(e){ showItem(e.target); });
+    layer.on('click', function(e){ clickItemMarker(e.target.feature.properties.id); });
   }
 });
+
+
+function clickItemMarker(id) {
+  // force map back to sleep, since we have no mouseout on mobile touchscreen
+  map.sleep._sleepMap();
+
+  // find the results link that corresponds to the marker and click it,
+  // so we get the URL hash, etc.
+  var a = document.querySelector('[data-id="'+id+'"]');
+  a.click();
+}
 
 var csvOptions = {
   lonfield: csvmap.config.lon_field,
@@ -354,6 +366,10 @@ function setLanguage(lang) {
       e.placeholder = csvmap.i18n[k][lang];
     }
     e.innerHTML = csvmap.i18n[k][lang];
+  }
+  // reset the map sleep note
+  if (map) {
+    map.sleep.sleepNote.innerHTML = csvmap.i18n.wake[lang];
   }
 }
 
@@ -673,7 +689,7 @@ function showResults(q, results, showid) {
 
     var ll = item.getLatLng();
     if (ll.lat != 0 || ll.lng != 0) {
-      // expand bounds to include current point
+      // expand bounds to include current point (if not 0,0)
       bounds.extend(item.getLatLng());
     }
 
@@ -684,20 +700,21 @@ function showResults(q, results, showid) {
     var a = li.firstChild;
 
     // link to marker on map
-    a.setAttribute('data', id);
+    a.dataset.id = id;
     a.onmouseover = function(e){
-      var id = e.target.getAttribute('data');
+      var id = e.target.dataset.id;
       layers[csvmap.id2leafid[id]].openTooltip();
     }
     a.onmouseout = function(e){
-      var id = e.target.getAttribute('data');
+      var id = e.target.dataset.id;
       layers[csvmap.id2leafid[id]].closeTooltip();
     }
     a.onclick = function(e){
-      var id = e.target.getAttribute('data');
+      var id = e.target.dataset.id;
       showItem(layers[csvmap.id2leafid[id]]);
 
       var ll = item.getLatLng();
+      // don't pan to 0,0 coordinates
       if (ll.lat != 0 || ll.lng != 0) {
         map.panTo(ll, { animate:false });
       }

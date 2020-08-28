@@ -137,6 +137,10 @@ var csvmap = {
     'wake': {
       'en': 'click to wake the map',
       'es': 'haga clic para activar el mapa'
+    },
+    'miles': {
+      'en': 'miles away',
+      'es': 'millas'
     }
   }
 }

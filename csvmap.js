@@ -362,9 +362,11 @@ function setLanguage(lang) {
   for (var i=0; i<elements.length; i++) {
     var e = elements[i];
     var k = e.dataset.i18n;
+    // for placeholder, we need to update just the attribute
     if (k.match(/-placeholder$/)) {
       e.placeholder = csvmap.i18n[k][lang];
     }
+    // for everything else, we update the element content
     e.innerHTML = csvmap.i18n[k][lang];
   }
   // reset the map sleep note
@@ -697,6 +699,11 @@ function showResults(q, results, showid) {
     var name = item.feature.properties[csvmap.config.name_field];
     var li = document.createElement('li');
     li.innerHTML = '<a href="#' + csvmap.lang + '/' + encodeHash(q) + '/' + encodeHash(id) + '">'+name+'</a>';
+    var dist = item.feature.properties.csvmapdist;
+    if (dist) {
+      // add 25% to straight-line distance to approximate driving distance
+      li.innerHTML += '<br>~' + Math.round(dist*1.25) + ' ' + csvmap.i18n.miles[csvmap.lang];
+    }
     var a = li.firstChild;
 
     // link to marker on map

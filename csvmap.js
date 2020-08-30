@@ -582,12 +582,20 @@ function search(q) {
     // sort layers by distance to user location
     var ruler = new CheapRuler(42.8, 'miles');
     for (var i=0; i<layers.length; i++) {
-      var dist = ruler.distance(layers[i].feature.geometry.coordinates, [csvmap.location.longitude, csvmap.location.latitude]);
-      layers[i].feature.properties.csvmapdist = dist;
+      var c = layers[i].feature.geometry.coordinates;
+      var dist;
+      if (c[0] == 0 && c[1] == 0) {
+        // phone hotlines have distance 0 -- will sort to top of results
+        dist = 0;
+      }
+      else {
+        dist = ruler.distance(c, [csvmap.location.longitude, csvmap.location.latitude]);
+      }
+      layers[i].feature.properties.tempdist = dist;
     }
     layers.sort(function(a,b){
-      var aa = a.feature.properties.csvmapdist;
-      var bb = b.feature.properties.csvmapdist;
+      var aa = a.feature.properties.tempdist;
+      var bb = b.feature.properties.tempdist;
       if (aa<bb) return -1;
       if (aa>bb) return 1;
       return 0;
@@ -624,6 +632,7 @@ function search(q) {
     // if all query terms match, add to results
     if (tests.every(x => x)) {
       results.push(item);
+      console.log(item.feature.properties._fulltext);
     }
   }
   return results;
@@ -679,11 +688,20 @@ function showResults(q, results, showid) {
     var name = item.feature.properties[csvmap.config.name_field];
     var li = document.createElement('li');
     li.innerHTML = '<a href="#' + csvmap.lang + '/' + encodeHash(q) + '/' + encodeHash(id) + '">'+name+'</a>';
-    var dist = item.feature.properties.csvmapdist;
-    if (dist) {
-      // add 25% to straight-line distance to approximate driving distance
-      li.innerHTML += '<br>~' + Math.round(dist*1.25) + ' ' + csvmap.i18n.miles[csvmap.lang];
+
+    // show distance to user (unless coordinates are 0,0)
+    var c = item.feature.geometry.coordinates;
+    if (c[0] != 0 || c[1] != 0) {
+      var dist = item.feature.properties.tempdist;
+      if (dist) {
+        // add 25% to straight-line distance to approximate driving distance
+        li.innerHTML += '<br>~' + Math.round(dist*1.25) + ' ' + csvmap.i18n.miles[csvmap.lang];
+      }
     }
+    else {
+      //li.innerHTML += '<br>(phone hotline)';
+    }
+
     var a = li.firstChild;
 
     // link to marker on map

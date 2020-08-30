@@ -150,8 +150,10 @@ var customLayer = L.geoJson(null, {
 
 
 function clickItemMarker(id) {
-  // force map back to sleep, since we have no mouseout on mobile touchscreen
-  map.sleep._sleepMap();
+  // (mobile only) force map back to sleep, since we have no mouseout on mobile touchscreen
+  if (csvmap.mobile()) {
+    map.sleep._sleepMap();
+  }
 
   // find the results link that corresponds to the marker and click it,
   // so we get the URL hash, etc.

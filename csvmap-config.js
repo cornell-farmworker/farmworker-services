@@ -33,6 +33,7 @@ var csvmap = {
       <h2>{{organization}}</h2>
       <dl>
         {{#website-en}}<dt>Website</dt><dd>{{{website-en}}}</dd>{{/website-en}}
+        {{#address}}
         <dt>Address</dt>
         <dd>{{address}},
           {{#address2}}{{address2}}, {{/address2}}
@@ -42,6 +43,7 @@ var csvmap = {
           <br>
           <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Directions <img src='image/icons/map.svg'></a>
         </dd>
+        {{/address}}
         {{#county}}<dt>County</dt><dd>{{county}}</dd>{{/county}}
         {{#phone}}<dt>Phone</dt><dd>{{phone}}</dd>{{/phone}}
         {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}

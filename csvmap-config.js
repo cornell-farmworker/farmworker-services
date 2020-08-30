@@ -98,21 +98,13 @@ var csvmap = {
       'en': 'español',
       'es': 'English'
     },
-    'home': {
+    'splash': {
       'en': `
-        <div>Welcome the Farmworker Service Directory, a statewide directory of resources, in English and <a href='#es'>Spanish</a>, for farmworkers and immigrants across New York State.</div>
-        <button id='browse-button' onclick='goBrowse();'>Click here to search the directory</button><br>
-        <div>The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.</div>
+        <div>The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.<button id='splash-button'>Click to continue...</button></div>
       `,
       'es': `
-        <div>Bienvenido/a al mapa de directorio en todo el estado de Nueva York que contiene servicios disponibles para los trabajadores agrícolas e inmigrantes, en <a href='#en'>inglés</a> y español.</div>
-        <button id='browse-button' onclick='goBrowse();'>Clic aquí para buscar directorio</button><br>
-        <div>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.</div>
+        <div>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<button id='splash-button'>Haz click para continuar...</button></div>
       `
-    },
-    'modal': {
-      'en': 'The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.<button>Click to continue...</button>',
-      'es': 'La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<button>Haz click para continuar...</button>'
     },
     'search-text': {
       'en': 'Search for services in New York State:',

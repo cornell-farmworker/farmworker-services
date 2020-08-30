@@ -3,7 +3,7 @@
 setLanguage(csvmap.lang);
 
 window.addEventListener('hashchange', interpretHash, false);
-document.getElementById('modal').onclick = closeModal;
+document.getElementById('splash-button').onclick = closeSplash;
 document.getElementById('home-button').onclick = goHome;
 document.getElementById('results-button').onclick = returnToResults;
 document.getElementById('language-button').onclick = switchLanguage;
@@ -183,7 +183,7 @@ function loadPoints() {
       }
 
       document.getElementById('loading').remove();
-      interpretHash();
+      //interpretHash();
 
     })
     .on('error', function(x) {
@@ -326,15 +326,9 @@ function interpretHash() {
   }
   setLanguage(lang);
 
-  // #es or #en -- show home
-  if (q === undefined) {
+  // #es or #en -- show home (browse)
+  if (q === undefined || q === '') {
     showHome();
-    return false;
-  }
-
-  // #es/ or #en/ -- search/browse by category
-  if (q === '') {
-    showBrowse();
     return false;
   }
 
@@ -346,11 +340,12 @@ function interpretHash() {
 }
 
 
-function closeModal() {
-  var m = document.getElementById('modal');
+function closeSplash() {
+  var m = document.getElementById('splash');
   if (m) {
     m.remove();
   }
+  interpretHash();
 }
 
 
@@ -529,27 +524,11 @@ function goHome(e) {
   if (e.target) {
     e.target.blur();
   }
-  closeModal();
   location.hash = csvmap.lang;
 }
 
 function showHome() {
-  document.getElementById('home').style.display = 'block';
-  document.getElementById('search').style.display = 'none';
-  document.getElementById('browse').style.display = 'none';
-  document.getElementById('results').style.display = 'none';
-  document.getElementById('results-button').style.display = 'none';
-  document.getElementById('item').style.display = 'none';
-  document.getElementById('map').style.display = 'none';
-}
-
-function goBrowse(e) {
-  location.hash = csvmap.lang + '/';
-}
-
-function showBrowse() {
   buildBrowse();
-  document.getElementById('home').style.display = 'none';
   document.getElementById('search').style.display = 'block';
   document.getElementById('q').value = '';
   document.getElementById('browse').style.display = 'block';
@@ -657,7 +636,6 @@ function clearMap() {
 
 function showResults(q, results, showid) {
   // reset results
-  document.getElementById('home').style.display = 'none';
   document.getElementById('search').style.display = 'block';
   document.getElementById('browse').style.display = 'none';
   document.getElementById('results').style.display = 'block';

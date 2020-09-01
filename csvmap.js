@@ -18,11 +18,11 @@ document.onkeyup = function(e) {
 navigator.geolocation.getCurrentPosition(gotLocation, gotLocationError, {enableHighAccuracy:false});
 
 function gotLocation(result) {
-  console.log(result);
+  console.log('Got user location');
   csvmap.location = result.coords;
 }
 function gotLocationError(result) {
-  console.log('error getting location');
+  console.log('Error getting location:');
   console.log(result);
 }
 
@@ -175,7 +175,7 @@ function loadPoints() {
       console.log('loaded ' + layers.length + ' points from ' + csvmap.config.data_file);
       initAutocomplete(layers);
       showResults('', search('')); // interpretHash won't display points unless we start by searching for everything
-      buildBrowse();
+      clearPage();
 
       // index the internal leaflet ids to the table ids
       var t = points.getLayers();
@@ -185,7 +185,6 @@ function loadPoints() {
       }
 
       document.getElementById('loading').remove();
-      //interpretHash();
 
     })
     .on('error', function(x) {
@@ -309,11 +308,14 @@ function initAutocomplete(layers) {
 
 
 function interpretHash() {
-  // the location hash determines what to show
-  var hash = location.hash;
+  // don't interpret hash until splash is hidden
+  var s = document.getElementById('splash');
+  if (s.style.display !== 'none') {
+    return;
+  }
 
-  // unescape hash
-  hash = unescape(hash).replace(/\+/g, ' ');
+  // the location hash determines what to show
+  var hash = unescape(location.hash).replace(/\+/g, ' ');
 
   // split hash into #lang/q/id
   var params = hash.split("/");
@@ -321,12 +323,14 @@ function interpretHash() {
   var q = params[1];
   var id = params[2];
 
-  // default to config lang if lang isn't 'en' or 'es'
+  // default to spanish if lang isn't 'en' or 'es'
   if (! lang.match(/en|es/)) {
-    location.hash = '#' + csvmap.lang;
+    location.hash = '#es';
     return false;
   }
+  console.log('interpret hash lang = '+lang);
   setLanguage(lang);
+  clearPage();
 
   // #es or #en -- show home (browse)
   if (q === undefined || q === '') {
@@ -341,17 +345,25 @@ function interpretHash() {
   showResults(q, search(q), id);
 }
 
+function clearPage() {
+  // hide most page components -- the appropriate divs will be turned back on
+  var divs = document.querySelectorAll('#search, #browse, #results, #results-button, #item, #map');
+  for (var i=0; i<divs.length; i++) {
+    divs[i].style.display = 'none';
+  }
+}
 
 function closeSplash() {
-  var m = document.getElementById('splash');
-  if (m) {
-    m.remove();
+  var s = document.getElementById('splash');
+  if (s) {
+    s.style.display = 'none';
+    interpretHash();
   }
-  interpretHash();
 }
 
 
 function setLanguage(lang) {
+  console.log('setting language to '+lang);
   csvmap.lang = lang;
   // look for all the i18n elements and set to the specified language
   // (the text strings are set in csvmap-config.js)
@@ -370,6 +382,8 @@ function setLanguage(lang) {
   if (map && map.sleep && map.sleep.sleepNote) {
     map.sleep.sleepNote.innerHTML = csvmap.i18n.wake[lang];
   }
+  // add splash listener back
+  document.getElementById('splash-button').onclick = closeSplash;
 }
 
 
@@ -377,6 +391,13 @@ function switchLanguage(e) {
   var b = e.target;
   b.blur();
   var lang = b.textContent.slice(0,2).toLowerCase();
+
+  // if still on splash screen, just update that section
+  var s = document.getElementById('splash');
+  if (s) {
+    setLanguage(lang);
+  }
+
   if (lang=='en') {
     location.hash = location.hash.replace(/^#es/, 'en');
   }
@@ -530,13 +551,10 @@ function goHome(e) {
 }
 
 function showHome() {
-  buildBrowse();
-  document.getElementById('search').style.display = 'block';
   document.getElementById('q').value = '';
+  document.getElementById('search').style.display = 'block';
+  buildBrowse();
   document.getElementById('browse').style.display = 'block';
-  document.getElementById('results').style.display = 'none';
-  document.getElementById('item').style.display = 'none';
-  document.getElementById('map').style.display = 'none';
 }
 
 function buildBrowse() {
@@ -632,7 +650,6 @@ function search(q) {
     // if all query terms match, add to results
     if (tests.every(x => x)) {
       results.push(item);
-      console.log(item.feature.properties._fulltext);
     }
   }
   return results;
@@ -648,9 +665,7 @@ function clearMap() {
 function showResults(q, results, showid) {
   // reset results
   document.getElementById('search').style.display = 'block';
-  document.getElementById('browse').style.display = 'none';
   document.getElementById('results').style.display = 'block';
-  document.getElementById('item').style.display = 'none';
   document.getElementById('map').style.display = 'block';
   clearMap();
   clearItem();
@@ -733,14 +748,19 @@ function showResults(q, results, showid) {
       a.focus();
     }
   }
-  // automatically show details if there is only one match
-  if (resultsList.childNodes.length == 1) {
+  // on non-mobile, automatically show details if there is only one match
+  if (!csvmap.mobile() && resultsList.childNodes.length == 1) {
     showItem(lastMatch);
   }
 
   // pad the bounds by 10% so that points aren't right on the edge of the map
   if (! showid && bounds.isValid()) {
-    map.fitBounds(bounds.pad(0.03));
+    map.fitBounds(bounds.pad(0.1));
+  }
+  // don't zoom results too far (which happens with single points)
+  // note we don't set maxZoom on the map, so that users can zoom in more if they want
+  if (map.getZoom() > 16) {
+    map.setZoom(16);
   }
 }
 

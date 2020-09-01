@@ -1,9 +1,19 @@
 'use strict';
 
+// set language from browser preferences
+var lang = navigator.language.slice(0,2) === 'en' ? 'en' : 'es';
+// but override with language in hash, if provided
+if (location.hash.slice(0,3) === '#es') {
+  lang = 'es';
+}
+else if (location.hash.slice(0,3) === '#en') {
+  lang = 'en';
+}
+
 var csvmap = {
 
   // default to english if that is the browser preference, otherwise spanish
-  lang: (navigator.language.slice(0,2) === 'en' ? 'en' : 'es'),
+  lang: lang,
 
   // are we using a mobile or other device with a small screen?
   mobile: function() { return window.matchMedia('(max-width:800px)').matches },

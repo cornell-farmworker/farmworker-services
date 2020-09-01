@@ -30,7 +30,7 @@ var csvmap = {
     name_field: 'organization',
     lon_field: 'longitude',
     lat_field: 'latitude',
-    multivalue_fields: [ 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'email', 'website-en', 'website-es' ],
+    multivalue_fields: [ 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'email', 'website-en', 'website-es', 'hours-en', 'hours-es' ],
 
     // all linked_fields should also be listed in multivalue_fields above
     linked_fields: [ 'email', 'website-en', 'website-es' ],
@@ -58,7 +58,7 @@ var csvmap = {
         {{#phone}}<dt>Phone</dt><dd>{{phone}}</dd>{{/phone}}
         {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}
         {{#email}}<dt>Contact</dt><dd>{{{email}}}</dd>{{/email}}
-        {{#hours-en}}<dt>Hours</dt><dd>{{hours-en}}</dd>{{/hours-en}}
+        {{#hours-en}}<dt>Hours</dt><dd>{{{hours-en}}}</dd>{{/hours-en}}
         {{#transportation-en}}<dt>Transportation</dt><dd>{{transportation-en}}</dd>{{/transportation-en}}
         {{#translation-en}}<dt>Translation</dt><dd>{{translation-en}}</dd>{{/translation-en}}
         {{#bilingual-en}}<dt>Bilingual</dt><dd>{{bilingual-en}}</dd>{{/bilingual-en}}
@@ -87,7 +87,7 @@ var csvmap = {
         {{#phone}}<dt>Teléfono</dt><dd>{{phone}}</dd>{{/phone}}
         {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}
         {{#email}}<dt>Contacto</dt><dd>{{{email}}}</dd>{{/email}}
-        {{#hours-es}}<dt>Horrario</dt><dd>{{hours-es}}</dd>{{/hours-es}}
+        {{#hours-es}}<dt>Horrario</dt><dd>{{{hours-es}}}</dd>{{/hours-es}}
         {{#transportation-es}}<dt>Transportación</dt><dd>{{transportation-es}}</dd>{{/transportation-es}}
         {{#translation-es}}<dt>Interpretación</dt><dd>{{translation-es}}</dd>{{/translation-es}}
         {{#bilingual-es}}<dt>Bilingüe</dt><dd>{{bilingual-es}}</dd>{{/bilingual-es}}

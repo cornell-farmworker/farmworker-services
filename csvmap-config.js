@@ -1,9 +1,19 @@
 'use strict';
 
+// set language from browser preferences
+var lang = navigator.language.slice(0,2) === 'en' ? 'en' : 'es';
+// but override with language in hash, if provided
+if (location.hash.slice(0,3) === '#es') {
+  lang = 'es';
+}
+else if (location.hash.slice(0,3) === '#en') {
+  lang = 'en';
+}
+
 var csvmap = {
 
   // default to english if that is the browser preference, otherwise spanish
-  lang: (navigator.language.slice(0,2) === 'en' ? 'en' : 'es'),
+  lang: lang,
 
   // are we using a mobile or other device with a small screen?
   mobile: function() { return window.matchMedia('(max-width:800px)').matches },
@@ -33,6 +43,7 @@ var csvmap = {
       <h2>{{organization}}</h2>
       <dl>
         {{#website-en}}<dt>Website</dt><dd>{{{website-en}}}</dd>{{/website-en}}
+        {{#address}}
         <dt>Address</dt>
         <dd>{{address}},
           {{#address2}}{{address2}}, {{/address2}}
@@ -40,8 +51,9 @@ var csvmap = {
           <br>
           {{city}}, {{state}} {{zipcode}}
           <br>
-          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Directions <img src='image/icons/map.svg'></a>
+          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Directions via Google<img src='image/icons/map.svg'></a>
         </dd>
+        {{/address}}
         {{#county}}<dt>County</dt><dd>{{county}}</dd>{{/county}}
         {{#phone}}<dt>Phone</dt><dd>{{phone}}</dd>{{/phone}}
         {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}
@@ -60,6 +72,7 @@ var csvmap = {
       <h2>{{organization}}</h2>
       <dl>
         {{#website-es}}<dt>Sitio web</dt><dd>{{{website-es}}}</dd>{{/website-es}}
+        {{#address}}
         <dt>Dirección</dt>
         <dd>{{address}},
           {{#address2}}{{address2}}, {{/address2}}
@@ -67,8 +80,9 @@ var csvmap = {
           <br>
           {{city}}, {{state}} {{zipcode}}
           <br>
-          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Direcciones <img src='image/icons/map.svg'></a>
+          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Direcciones de Google<img src='image/icons/map.svg'></a>
         </dd>
+        {{/address}}
         {{#county}}<dt>Condado</dt><dd>{{county}}</dd>{{/county}}
         {{#phone}}<dt>Teléfono</dt><dd>{{phone}}</dd>{{/phone}}
         {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}
@@ -98,21 +112,13 @@ var csvmap = {
       'en': 'español',
       'es': 'English'
     },
-    'home': {
+    'splash': {
       'en': `
-        <div>Welcome the Farmworker Service Directory, a statewide directory of resources, in English and <a href='#es'>Spanish</a>, for farmworkers and immigrants across New York State.</div>
-        <button id='browse-button' onclick='goBrowse();'>Click here to search the directory</button><br>
-        <div>The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.</div>
+        <div>The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.<button id='splash-button'>Click to continue...</button></div>
       `,
       'es': `
-        <div>Bienvenido/a al mapa de directorio en todo el estado de Nueva York que contiene servicios disponibles para los trabajadores agrícolas e inmigrantes, en <a href='#en'>inglés</a> y español.</div>
-        <button id='browse-button' onclick='goBrowse();'>Clic aquí para buscar directorio</button><br>
-        <div>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.</div>
+        <div>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<button id='splash-button'>Haz click para continuar...</button></div>
       `
-    },
-    'modal': {
-      'en': 'The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.<button>Click to continue...</button>',
-      'es': 'La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<button>Haz click para continuar...</button>'
     },
     'search-text': {
       'en': 'Search for services in New York State:',

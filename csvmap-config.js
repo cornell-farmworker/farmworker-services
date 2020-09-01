@@ -51,7 +51,7 @@ var csvmap = {
           <br>
           {{city}}, {{state}} {{zipcode}}
           <br>
-          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Directions <img src='image/icons/map.svg'></a>
+          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Directions via Google<img src='image/icons/map.svg'></a>
         </dd>
         {{/address}}
         {{#county}}<dt>County</dt><dd>{{county}}</dd>{{/county}}
@@ -80,7 +80,7 @@ var csvmap = {
           <br>
           {{city}}, {{state}} {{zipcode}}
           <br>
-          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Direcciones <img src='image/icons/map.svg'></a>
+          <a href="https://www.google.com/maps/dir/?api=1&destination={{address}},+{{city}},+{{state}}+{{zipcode}}" target="_blank">Direcciones de Google<img src='image/icons/map.svg'></a>
         </dd>
         {{/address}}
         {{#county}}<dt>Condado</dt><dd>{{county}}</dd>{{/county}}

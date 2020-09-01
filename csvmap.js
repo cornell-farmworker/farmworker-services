@@ -399,10 +399,10 @@ function switchLanguage(e) {
   }
 
   if (lang=='en') {
-    location.hash = location.hash.replace(/^#es/, 'en');
+    location.hash = location.hash.replace(/^#es|^$/, 'en');
   }
   else {
-    location.hash = location.hash.replace(/^#en/, 'es');
+    location.hash = location.hash.replace(/^#en|^$/, 'es');
   }
 }
 

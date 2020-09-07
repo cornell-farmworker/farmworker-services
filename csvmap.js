@@ -315,7 +315,6 @@ function interpretHash() {
     location.hash = '#es';
     return false;
   }
-  console.log('interpret hash lang = '+lang);
   setLanguage(lang);
   clearPage();
 
@@ -350,7 +349,6 @@ function closeSplash() {
 
 
 function setLanguage(lang) {
-  console.log('setting language to '+lang);
   csvmap.lang = lang;
   // look for all the i18n elements and set to the specified language
   // (the text strings are set in csvmap-config.js)

@@ -30,15 +30,7 @@ function gotLocationError(result) {
 var map = L.map('map', {
   fadeAnimation: false,
   fullscreenControl: true,
-  sleep: csvmap.mobile(), // activate sleep only when using a small screen
-  sleepTime: 500,
-  wakeTime: 1000
 });
-
-if (csvmap.mobile()) {
-  // put map sleep note at top
-  map.sleep.sleepNote.style.top = 0;
-}
 
 // use a openstreetmap basemap
 var osm = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -150,11 +142,6 @@ var customLayer = L.geoJson(null, {
 
 
 function clickItemMarker(id) {
-  // (mobile only) force map back to sleep, since we have no mouseout on mobile touchscreen
-  if (csvmap.mobile()) {
-    map.sleep._sleepMap();
-  }
-
   // find the results link that corresponds to the marker and click it,
   // so we get the URL hash, etc.
   var a = document.querySelector('[data-id="'+id+'"]');
@@ -377,10 +364,6 @@ function setLanguage(lang) {
     }
     // for everything else, we update the element content
     e.innerHTML = csvmap.i18n[k][lang];
-  }
-  // reset the map sleep note
-  if (map && map.sleep && map.sleep.sleepNote) {
-    map.sleep.sleepNote.innerHTML = csvmap.i18n.wake[lang];
   }
   // add splash listener back
   document.getElementById('splash-button').onclick = closeSplash;

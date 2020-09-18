@@ -61,7 +61,7 @@ var csvmap = {
         {{#hours-en}}<dt>Hours</dt><dd>{{{hours-en}}}</dd>{{/hours-en}}
         {{#transportation-en}}<dt>Transportation</dt><dd>{{transportation-en}}</dd>{{/transportation-en}}
         {{#translation-en}}<dt>Translation</dt><dd>{{translation-en}}</dd>{{/translation-en}}
-        {{#bilingual-en}}<dt>Bilingual</dt><dd>{{bilingual-en}}</dd>{{/bilingual-en}}
+        {{#bilingual-en}}<dt>Bilingual staff</dt><dd>{{bilingual-en}}</dd>{{/bilingual-en}}
         {{#documents-en}}<dt>Required documents</dt><dd>{{documents-en}}</dd>{{/documents-en}}
         {{#citizenship-en}}<dt>Citizenship</dt><dd>{{citizenship-en}}</dd>{{/citizenship-en}}
         {{#cost-en}}<dt>Cost</dt><dd>{{cost-en}}</dd>{{/cost-en}}
@@ -87,12 +87,12 @@ var csvmap = {
         {{#phone}}<dt>Teléfono</dt><dd>{{phone}}</dd>{{/phone}}
         {{#fax}}<dt>Fax</dt><dd>{{fax}}</dd>{{/fax}}
         {{#email}}<dt>Contacto</dt><dd>{{{email}}}</dd>{{/email}}
-        {{#hours-es}}<dt>Horrario</dt><dd>{{{hours-es}}}</dd>{{/hours-es}}
+        {{#hours-es}}<dt>Horario</dt><dd>{{{hours-es}}}</dd>{{/hours-es}}
         {{#transportation-es}}<dt>Transportación</dt><dd>{{transportation-es}}</dd>{{/transportation-es}}
         {{#translation-es}}<dt>Interpretación</dt><dd>{{translation-es}}</dd>{{/translation-es}}
-        {{#bilingual-es}}<dt>Bilingüe</dt><dd>{{bilingual-es}}</dd>{{/bilingual-es}}
+        {{#bilingual-es}}<dt>Empleados bilingües</dt><dd>{{bilingual-es}}</dd>{{/bilingual-es}}
         {{#documents-es}}<dt>Documentos requeridos</dt><dd>{{documents-es}}</dd>{{/documents-es}}
-        {{#citizenship-es}}<dt>Ciudadanía</dt><dd>{{citizenship-es}}</dd>{{/citizenship-es}}
+        {{#citizenship-es}}<dt>Ciudadanía EEUU</dt><dd>{{citizenship-es}}</dd>{{/citizenship-es}}
         {{#cost-es}}<dt>Costos</dt><dd>{{cost-es}}</dd>{{/cost-es}}
         {{#service-types}}<dt>Tipos de servicios</dt><dd>{{{service-types}}}</dd>{{/service-types}}
       </dl>

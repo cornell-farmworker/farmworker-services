@@ -3,7 +3,7 @@
  */
 
 a { text-decoration:none ; color:#078b6c ; font-weight:bold }
-a:hover, a:active { text-decoration:underline ; color:#078b6c }
+a:hover, a:active { text-decoration:underline ; color:#078b6c ; cursor:pointer }
 body { font-family:"Segoe UI", Roboto, Arial, sans-serif ; margin:0 }
 
 button { background:#078b6c ; color:#fff ; border:none ; border-radius:0.8em ; padding:0.5em 1em }

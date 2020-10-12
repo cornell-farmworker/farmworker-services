@@ -121,10 +121,13 @@ var customLayer = L.geoJson(null, {
               // make sure for each subcategory that we have the corresponding category
               var cat = csvmap.sub2cat[v2v];
               if (feature.properties['category-en'].indexOf(cat) < 0) {
-                console.log(feature.properties.id + ' ' + v2v + ' -- ' + cat);
                 feature.properties['category-en'].push(cat);
+
+                // add spanish category
                 var cat_es = csvmap.i18n[cat].es
                 feature.properties['category-es'].push(cat_es);
+
+                // add both en and es category to the fulltext search
                 fulltext += cat + ' ' + cat_es + ' ';
               }
             }

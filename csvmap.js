@@ -418,8 +418,6 @@ function showItem(layer) {
   }
 
   var p = layer.feature.properties;
-  console.log(p['category-en']);
-  console.log(p['subcategory-en']);
   var p2 = {};
 
   // prepare selected properties before insertion into Mustache template

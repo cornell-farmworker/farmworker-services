@@ -671,6 +671,11 @@ function clearMap() {
   }
 }
 
+function viewMap() {
+  document.getElementById('map').scrollIntoView();
+  return false;
+}
+
 function showResults(q, results, showid) {
   // reset results
   document.getElementById('search').style.display = 'block';
@@ -684,8 +689,12 @@ function showResults(q, results, showid) {
   resultsDiv.innerHTML = '';
 
   if (csvmap.location) {
-    var msg = csvmap.i18n.nearest[csvmap.lang];
-    resultsDiv.innerHTML = '<div>'+msg+'</div>';
+    var nearest = csvmap.i18n['nearest'][csvmap.lang];
+    resultsDiv.innerHTML = '<div>'+nearest+'</div>';
+    if (csvmap.mobile()) {
+      var viewmap = csvmap.i18n['view-map'][csvmap.lang];
+      resultsDiv.innerHTML += '<a onclick="viewMap()">'+viewmap+'</a>';
+    }
   }
 
   var resultsList = document.createElement('ul');

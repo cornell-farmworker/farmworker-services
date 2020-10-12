@@ -140,6 +140,10 @@ var csvmap = {
       'en': 'The services nearest to your location are listed first.',
       'es': 'Los servicios más cercanos se enumeran primero.'
     },
+    'view-map': {
+      'en': 'View on map',
+      'es': 'Ver en el mapa'
+    },
     'wake': {
       'en': 'click to wake the map',
       'es': 'haga clic para activar el mapa'

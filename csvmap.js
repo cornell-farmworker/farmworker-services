@@ -102,7 +102,7 @@ var customLayer = L.geoJson(null, {
           if (v2v.length>0) {
             v2.push(v2v);
 
-            // check for invalid categories/subcategories (en or es)
+            // check for invalid categories/subcategories
             if (p === 'category-en') {
               if (csvmap.categories.indexOf(v2v)===-1) {
                 console.log('record ' + feature.properties.id + ' has an invalid '+p+': '+v2v);
@@ -117,6 +117,18 @@ var customLayer = L.geoJson(null, {
               }
               else {
                 v2es.push(csvmap.i18n[v2v].es);
+              }
+              // make sure for each subcategory that we have the corresponding category
+              var cat = csvmap.sub2cat[v2v];
+              if (feature.properties['category-en'].indexOf(cat) < 0) {
+                feature.properties['category-en'].push(cat);
+
+                // add spanish category
+                var cat_es = csvmap.i18n[cat].es
+                feature.properties['category-es'].push(cat_es);
+
+                // add both en and es category to the fulltext search
+                fulltext += cat + ' ' + cat_es + ' ';
               }
             }
           }
@@ -188,6 +200,7 @@ function gotCategories(results) {
   var tree = {};
   var categories = [];
   var subcategories = [];
+  var sub2cat = {};
   csvmap.icon = {}; // to hold icon filenames for each category/subcategory
   for (var i=0; i<langs.length; i++) {
     tree[langs[i]] = {};
@@ -207,6 +220,11 @@ function gotCategories(results) {
       if (sub && subcategories.indexOf(sub)===-1) {
         subcategories.push(sub)
         tree[lang][cat].push(sub);
+      }
+
+      // build sub2cat index (en only)
+      if (lang == 'en') {
+        sub2cat[sub] = cat;
       }
     }
 
@@ -233,9 +251,11 @@ function gotCategories(results) {
       'es': subcat_es
     }
   }
+  // store data in csvmap
   csvmap.categoryTree = tree;
   csvmap.categories = categories;
   csvmap.subcategories = subcategories;
+  csvmap.sub2cat = sub2cat;
   loadPoints();
 }
 
@@ -447,7 +467,15 @@ function showItem(layer) {
   var tree = csvmap.categoryTree.en;
   var ul = document.createElement('ul');
   for (var cat in tree) {
-    if (! p['category-en'].includes(cat)) continue;
+
+    // make sure the item has either the category or subcategory
+    // (sometimes there are errors in the item data where category was not listed for a subcategory)
+    var hasCategory = p['category-en'].includes(cat);
+    var hasSubcategory = tree[cat].filter(function(n) { return p['subcategory-en'].indexOf(n) !== -1 }).length > 0;
+    if (! hasCategory && ! hasSubcategory) {
+      continue;
+    }
+
     var li = document.createElement('li');
     var img = '<img src="' + csvmap.icon[cat] + '" /> ';
     var catstr = csvmap.i18n[cat][csvmap.lang];

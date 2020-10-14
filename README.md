@@ -7,4 +7,4 @@ A simple, searchable point map of Farmworker Services in New York State, powered
 This is a project of the [Cornell Farmworker Program](https://cardi.cals.cornell.edu/programs/farmworker/)
 
 
-[See the wiki](https://github.com/cornell-farmworker/farmworker-services/wiki) for guidance on updating the site.
+[See the wiki](https://github.com/cornell-farmworker/farmworker-services/wiki) for guidance on updating the site. WOW!

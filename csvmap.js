@@ -510,7 +510,7 @@ function showItem(layer) {
 
   // highlight this marker
   layer.bringToFront().setStyle({
-    fillColor:'#ffff00',
+    fillColor:'#9d9',
     color:'#034536',
     weight:1,
     radius:10

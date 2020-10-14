@@ -50,8 +50,9 @@ h1 a { text-decoration:none ; color:#fff ! important }
 #browse img { height:32px ; vertical-align:middle }
 
 #results { clear:both ; width:30% ; float:left ; padding: 0 1% }
-#results a { text-decoration:none ; color:#078b6c }
+#results a { text-decoration:none ; color:#078b6c ; padding:0 3px }
 #results a:hover, #results a:focus { text-decoration:underline ; color:#078b6c }
+#results a.selected { text-decoration:none ; background:#078b6c ; color:#fff }
 
 #map { height:85% ; width:30% ; border:2px solid #000 ; display:none }
 

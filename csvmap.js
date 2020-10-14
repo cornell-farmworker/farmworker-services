@@ -18,7 +18,7 @@ document.onkeyup = function(e) {
 navigator.geolocation.getCurrentPosition(gotLocation, gotLocationError, {enableHighAccuracy:false});
 
 function gotLocation(result) {
-  console.log('Got user location');
+  console.log('Got Location');
   csvmap.location = result.coords;
 }
 function gotLocationError(result) {
@@ -60,11 +60,11 @@ var customLayer = L.geoJson(null, {
   },
   style: function() {
     return {
-      radius: 6,
+      radius: 5,
       color: '#eee',
       fillColor: '#078b6c',
-      weight: 1,
-      fillOpacity:1
+      weight: 0.7,
+      fillOpacity: 1
     };
   },
   onEachFeature: function(feature, layer) {
@@ -511,7 +511,7 @@ function showItem(layer) {
   // highlight this marker
   layer.bringToFront().setStyle({
     fillColor:'#ffff00',
-    color:'#000',
+    color:'#034536',
     weight:1,
     radius:10
   });
@@ -750,6 +750,15 @@ function showResults(q, results, showid) {
     a.onclick = function(e){
       var id = e.target.dataset.id;
       showItem(layers[csvmap.id2leafid[id]]);
+
+      // unselect any existing selected item
+      var s = document.getElementsByClassName('selected')[0];
+      if (s) {
+        s.classList.remove('selected');
+      }
+
+      // select this list item
+      e.target.classList.add('selected');
 
       var ll = item.getLatLng();
       // don't pan to 0,0 coordinates

@@ -84,7 +84,7 @@ var customLayer = L.geoJson(null, {
       // add "County" to county names
       if (p == 'county' && v) {
         v += ' County';
-      feature.properties[p] = v;;
+        feature.properties[p] = v;;
       }
 
 

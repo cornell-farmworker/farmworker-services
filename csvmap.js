@@ -84,8 +84,9 @@ var customLayer = L.geoJson(null, {
       // add "County" to county names (undid to fix issue with adding county after statewide C.S.)
       //if (p == 'county' && v) {
         //v += ' County';
-        //feature.properties[p] = v;;
-      }
+      //feature.properties[p] = v;;
+      //}
+
 
       // add value to fulltext if it is a searched field
       if (csvmap.config.searched_fields.indexOf(p) > -1) {

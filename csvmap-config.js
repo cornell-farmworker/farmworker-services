@@ -1,43 +1,42 @@
-'use strict';
+'use strict'
 
 // set language from browser preferences
-var lang = navigator.language.slice(0,2) === 'en' ? 'en' : 'es';
+var lang = navigator.language.slice(0, 2) === 'en' ? 'en' : 'es'
 // but override with language in hash, if provided
-if (location.hash.slice(0,3) === '#es') {
-  lang = 'es';
-}
-else if (location.hash.slice(0,3) === '#en') {
-  lang = 'en';
+if (window.location.hash.slice(0, 3) === '#es') {
+  lang = 'es'
+} else if (window.location.hash.slice(0, 3) === '#en') {
+  lang = 'en'
 }
 
-var csvmap = {
+let csvmap = {
 
   // default to english if that is the browser preference, otherwise spanish
   lang: lang,
 
   // are we using a mobile or other device with a small screen?
-  mobile: function() { return window.matchMedia('(max-width:800px)').matches },
+  mobile: function () { return window.matchMedia('(max-width:800px)').matches },
 
   config: {
     title: 'Farmworker Service Directory',
 
-    //categories_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1927915399&single=true&output=csv',
+    // categories_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1927915399&single=true&output=csv',
     categories_file: 'data/categories.csv',
 
-    //data_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1785004179&single=true&output=csv',
+    // data_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1785004179&single=true&output=csv',
     data_file: 'data/services.csv',
 
     name_field: 'organization',
     lon_field: 'longitude',
     lat_field: 'latitude',
-    multivalue_fields: [ 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'email', 'website-en', 'website-es', 'hours-en', 'hours-es' ],
+    multivalue_fields: ['category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'email', 'website-en', 'website-es', 'hours-en', 'hours-es'],
 
     // all linked_fields should also be listed in multivalue_fields above
-    linked_fields: [ 'email', 'website-en', 'website-es' ],
+    linked_fields: ['email', 'website-en', 'website-es'],
 
-    autocomplete_fields: [ 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'city', 'county', 'organization' ],
-    searched_fields: [ 'county', 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'organization', 'city', 'zipcode' ],
-    //bilingual_fields: [ 'website', 'hours', 'transportation', 'translation', 'bilingual', 'documents', 'citizenship', 'cost' ],
+    autocomplete_fields: ['category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'city', 'county', 'organization'],
+    searched_fields: ['county', 'category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'organization', 'city', 'zipcode'],
+    // bilingual_fields: [ 'website', 'hours', 'transportation', 'translation', 'bilingual', 'documents', 'citizenship', 'cost' ],
 
     template_en: `
       <h2>{{organization}}</h2>
@@ -154,4 +153,3 @@ var csvmap = {
     }
   }
 }
-

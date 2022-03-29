@@ -103,7 +103,7 @@ var customLayer = L.geoJson(null, {
           if (v2v.length>0) {
             v2.push(v2v);
 
-            // check for invalid categories/subcategories
+            // check for invalid categories
             if (p === 'category-en') {
               if (csvmap.categories.indexOf(v2v)===-1) {
                 console.log('record ' + feature.properties.id + ' has an invalid '+p+': '+v2v);
@@ -112,6 +112,7 @@ var customLayer = L.geoJson(null, {
                 v2es.push(csvmap.i18n[v2v].es);
               }
             }
+            // check for invalid subcategories
             else if (p === 'subcategory-en') {
               if (csvmap.subcategories.indexOf(v2v)===-1) {
                 console.log('record ' + feature.properties.id + ' has an invalid '+p+': '+v2v);
@@ -121,7 +122,7 @@ var customLayer = L.geoJson(null, {
               }
               // make sure for each subcategory that we have the corresponding category
               var cat = csvmap.sub2cat[v2v];
-              if (feature.properties['category-en'].indexOf(cat) < 0) {
+              if (cat && feature.properties['category-en'].indexOf(cat) < 0) {
                 feature.properties['category-en'].push(cat);
 
                 // add spanish category

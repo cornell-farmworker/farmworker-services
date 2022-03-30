@@ -1,3 +1,4 @@
+/* global csvmap, Awesomplete, CheapRuler, L, Mustache, omnivore, Papa */
 'use strict'
 
 setLanguage(csvmap.lang)
@@ -9,7 +10,7 @@ document.getElementById('results-button').onclick = returnToResults
 document.getElementById('language-button').onclick = switchLanguage
 document.getElementById('search-form').onsubmit = submitSearch
 document.onkeyup = function (e) {
-  if (e.key == 'Escape') {
+  if (e.key === 'Escape') {
     clearItem()
   }
 }
@@ -32,8 +33,8 @@ const map = L.map('map', {
   fullscreenControl: true
 })
 
-// use a openstreetmap basemap
-const osm = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+// openstreetmap basemap
+L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
   maxZoom: 19,
   minZoom: 4,
   opacity: 1,
@@ -163,8 +164,8 @@ const csvOptions = {
 }
 
 function loadPoints () {
-  window.points = omnivore.csv(csvmap.config.data_file, csvOptions, customLayer)
-    .on('ready', function (err, data) {
+  csvmap.points = omnivore.csv(csvmap.config.data_file, csvOptions, customLayer)
+    .on('ready', function () {
       // once we have all the data...
       const layers = this.getLayers()
       console.log('loaded ' + layers.length + ' points from ' + csvmap.config.data_file)
@@ -173,7 +174,7 @@ function loadPoints () {
       clearPage()
 
       // index the internal leaflet ids to the table ids
-      const t = points.getLayers()
+      const t = csvmap.points.getLayers()
       for (let i = 0; i < t.length; i++) {
         const id = t[i].feature.properties.id
         csvmap.id2leafid[id] = i
@@ -181,9 +182,8 @@ function loadPoints () {
 
       document.getElementById('loading').remove()
     })
-    .on('error', function (x) {
+    .on('error', function () {
       console.log('error parsing ' + csvmap.config.data_file)
-      console.log(x)
     })
     .addTo(map)
 }
@@ -196,10 +196,10 @@ function gotCategories (results) {
   const subcategories = []
   const sub2cat = {}
   csvmap.icon = {} // to hold icon filenames for each category/subcategory
-  for (var i = 0; i < langs.length; i++) {
+  for (let i = 0; i < langs.length; i++) {
     tree[langs[i]] = {}
   }
-  for (var i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     const row = data[i]
 
     // build category tree for each language
@@ -217,7 +217,7 @@ function gotCategories (results) {
       }
 
       // build sub2cat index (en only)
-      if (lang == 'en') {
+      if (lang === 'en') {
         sub2cat[sub] = cat
       }
     }
@@ -225,15 +225,15 @@ function gotCategories (results) {
     // build category icon index
     const cat_en = row['category-en']
     const cat_es = row['category-es']
-    var icon = 'image/icons/' + cat_en.replace(/\W+/g, '-').toLowerCase() + '.svg'
-    csvmap.icon[cat_en] = icon
-    csvmap.icon[cat_es] = icon
+    const caticon = 'image/icons/' + cat_en.replace(/\W+/g, '-').toLowerCase() + '.svg'
+    csvmap.icon[cat_en] = caticon
+    csvmap.icon[cat_es] = caticon
 
     const subcat_en = row['subcategory-en']
     const subcat_es = row['subcategory-es']
-    var icon = 'image/icons/' + subcat_en.replace(/\W+/g, '-').toLowerCase() + '.svg'
-    csvmap.icon[subcat_en] = icon
-    csvmap.icon[subcat_es] = icon
+    const subcaticon = 'image/icons/' + subcat_en.replace(/\W+/g, '-').toLowerCase() + '.svg'
+    csvmap.icon[subcat_en] = subcaticon
+    csvmap.icon[subcat_es] = subcaticon
 
     // add cat/subcat to i18n list
     csvmap.i18n[cat_en] = {
@@ -261,7 +261,7 @@ function escapeRegExp (text) {
 function initAutocomplete (layers) {
   // build a list of all software, and use it to provide
   // autocomplete for the search box
-  const autocomplete_terms = []
+  const autocompleteTerms = []
   for (let j = 0; j < layers.length; j++) {
     for (let fj = 0; fj < csvmap.config.autocomplete_fields.length; fj++) {
       const field = csvmap.config.autocomplete_fields[fj]
@@ -269,19 +269,19 @@ function initAutocomplete (layers) {
       if (Array.isArray(val)) {
         for (let ai = 0; ai < val.length; ai++) {
           const vi = val[ai]
-          if (autocomplete_terms.indexOf(vi) < 0) {
-            autocomplete_terms.push(vi)
+          if (autocompleteTerms.indexOf(vi) < 0) {
+            autocompleteTerms.push(vi)
           }
         }
       } else {
-        if (autocomplete_terms.indexOf(val) < 0) {
-          autocomplete_terms.push(val)
+        if (autocompleteTerms.indexOf(val) < 0) {
+          autocompleteTerms.push(val)
         }
       }
     }
   }
   // sort autocomplete terms, case-insensitive
-  autocomplete_terms.sort(function (a, b) {
+  autocompleteTerms.sort(function (a, b) {
     const aa = a.toLowerCase()
     const bb = b.toLowerCase()
     if (aa < bb) return -1
@@ -292,7 +292,7 @@ function initAutocomplete (layers) {
   // add the autocomplete to the search box
   const q = document.getElementById('q')
   new Awesomplete(q, {
-    list: autocomplete_terms,
+    list: autocompleteTerms,
     minChars: 1,
     filter: function (text, qterm) {
       const re = new RegExp('\\b' + escapeRegExp(qterm), 'i')
@@ -313,7 +313,7 @@ function interpretHash () {
   }
 
   // the location hash determines what to show
-  const hash = unescape(location.hash).replace(/\+/g, ' ')
+  const hash = unescape(window.location.hash).replace(/\+/g, ' ')
 
   // split hash into #lang/q/id
   const params = hash.split('/')
@@ -323,7 +323,7 @@ function interpretHash () {
 
   // default to spanish if lang isn't 'en' or 'es'
   if (!lang.match(/en|es/)) {
-    location.hash = '#es'
+    window.location.hash = '#es'
     return false
   }
   setLanguage(lang)
@@ -388,10 +388,10 @@ function switchLanguage (e) {
     setLanguage(lang)
   }
 
-  if (lang == 'en') {
-    location.hash = location.hash.replace(/^#es|^$/, 'en')
+  if (lang === 'en') {
+    window.location.hash = window.location.hash.replace(/^#es|^$/, 'en')
   } else {
-    location.hash = location.hash.replace(/^#en|^$/, 'es')
+    window.location.hash = window.location.hash.replace(/^#en|^$/, 'es')
   }
 }
 
@@ -408,7 +408,7 @@ function showItem (layer) {
   const p2 = {}
 
   // prepare selected properties before insertion into Mustache template
-  for (var i in Object.keys(p)) {
+  for (let i in Object.keys(p)) {
     const property = Object.keys(p)[i]
 
     // copy of value(s)
@@ -418,17 +418,17 @@ function showItem (layer) {
     }
 
     // add icon to category, and make into a link
-    if (property == 'category' || property == 'subcategory') {
-      for (var vi = 0; vi < value.length; vi++) {
-        var v = value[vi]
+    if (property === 'category' || property === 'subcategory') {
+      for (let vi = 0; vi < value.length; vi++) {
+        const v = value[vi]
         value[vi] = '<a href="#/' + v + '"><img src="' + csvmap.icon[v] + '" /> ' + v + '</a>'
       }
     }
 
     // linkify linked fields
     if ((csvmap.config.linked_fields.indexOf(property) > -1) && value.length > 0) {
-      for (var vi = 0; vi < value.length; vi++) {
-        var v = value[vi]
+      for (let vi = 0; vi < value.length; vi++) {
+        let v = value[vi]
         if (v.indexOf('@') > -1) {
           v = v.replace(/(\S+@\S+)/g, '<a href="mailto:$1" target="_blank">$1</a>')
         } else {
@@ -503,9 +503,10 @@ function showItem (layer) {
 
 function returnToResults (e) {
   document.getElementById('results-button').style.display = 'none'
-  location.hash = location.hash.replace(/\/\d+$/, '')
+  window.location.hash = window.location.hash.replace(/\/\d+$/, '')
 }
 
+// TODO unused code???
 function icon (category) {
   // return an image element for the given category or subcategory
   const icon = category.replace(/\W+/g, '-').toLowerCase() + '.svg'
@@ -516,8 +517,8 @@ function icon (category) {
 function clearItem () {
   document.getElementById('item').innerHTML = ''
   // reset all markers
-  window.points.eachLayer(function (el) {
-    window.points.resetStyle(el)
+  csvmap.points.eachLayer(function (el) {
+    csvmap.points.resetStyle(el)
   })
 }
 
@@ -537,7 +538,7 @@ function goHome (e) {
   if (e.target) {
     e.target.blur()
   }
-  location.hash = csvmap.lang
+  window.location.hash = csvmap.lang
 }
 
 function showHome () {
@@ -574,7 +575,7 @@ function submitSearch (e) {
   e.preventDefault()
   e.returnValue = ''
   const q = document.getElementById('q').value.trim()
-  location.hash = csvmap.lang + '/' + encodeHash(q)
+  window.location.hash = csvmap.lang + '/' + encodeHash(q)
   document.title = csvmap.config.title + ': ' + q
   showResults(q, search(q))
   return false
@@ -584,7 +585,7 @@ function search (q) {
   // search for the given query string q and return sorted array of results
 
   // start by sorting all layers
-  const layers = window.points.getLayers()
+  const layers = csvmap.points.getLayers()
 
   if (csvmap.location) {
     // sort layers by distance to user location
@@ -592,7 +593,7 @@ function search (q) {
     for (var i = 0; i < layers.length; i++) {
       const c = layers[i].feature.geometry.coordinates
       var dist
-      if (c[0] == 0 && c[1] == 0) {
+      if (c[0] === 0 && c[1] === 0) {
         // phone hotlines have distance 0 -- will sort to top of results
         dist = 0
       } else {
@@ -624,14 +625,14 @@ function search (q) {
   // create regexp for each term in the query
   const qterms = q.split(' ')
   const regexps = []
-  for (var i = 0; i < qterms.length; i++) {
+  for (let i = 0; i < qterms.length; i++) {
     // query must match beginning of a word
     const re = new RegExp('\\b' + escapeRegExp(qterms[i]), 'i')
     regexps.push(re)
   }
 
   const results = []
-  for (var i = 0; i < layers.length; i++) {
+  for (let i = 0; i < layers.length; i++) {
     var item = layers[i]
     const tests = regexps.map(x => item.feature.properties._fulltext.match(x))
 
@@ -644,12 +645,13 @@ function search (q) {
 }
 
 function clearMap () {
-  const layers = window.points.getLayers()
+  const layers = csvmap.points.getLayers()
   for (let i = 0; i < layers.length; i++) {
     layers[i].remove()
   }
 }
 
+// TODO unused code???
 function viewMap () {
   document.getElementById('map').scrollIntoView()
   return false
@@ -682,16 +684,18 @@ function showResults (q, results, showid) {
   let lastMatch = null
   const bounds = L.latLngBounds()
 
-  const layers = window.points.getLayers()
+  const layers = csvmap.points.getLayers()
 
   for (let i = 0; i < results.length; i++) {
     var item = results[i]
     lastMatch = item
     item.addTo(map)
-    const leafid = points.getLayerId(item)
+
+    // TODO unused
+    const leafid = csvmap.points.getLayerId(item)
 
     const ll = item.getLatLng()
-    if (ll.lat != 0 || ll.lng != 0) {
+    if (ll.lat !== 0 || ll.lng !== 0) {
       // expand bounds to include current point (if not 0,0)
       bounds.extend(item.getLatLng())
     }
@@ -703,7 +707,7 @@ function showResults (q, results, showid) {
 
     // show distance to user (unless coordinates are 0,0)
     const c = item.feature.geometry.coordinates
-    if (c[0] != 0 || c[1] != 0) {
+    if (c[0] !== 0 || c[1] !== 0) {
       const dist = item.feature.properties.tempdist
       if (dist) {
         // add 25% to straight-line distance to approximate driving distance
@@ -740,7 +744,7 @@ function showResults (q, results, showid) {
 
       const ll = item.getLatLng()
       // don't pan to 0,0 coordinates
-      if (ll.lat != 0 || ll.lng != 0) {
+      if (ll.lat !== 0 || ll.lng !== 0) {
         map.panTo(ll, { animate: false })
       }
     }
@@ -754,7 +758,7 @@ function showResults (q, results, showid) {
     }
   }
   // on non-mobile, automatically show details if there is only one match
-  if (!csvmap.mobile() && resultsList.childNodes.length == 1) {
+  if (!csvmap.mobile() && resultsList.childNodes.length === 1) {
     showItem(lastMatch)
   }
 

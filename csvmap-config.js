@@ -117,10 +117,10 @@ let csvmap = {
     },
     'splash': {
       'en': `
-        <div>The information in this directory was obtained in April of 2020, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.<button id='splash-button'>Click to continue...</button></div>
+        <div>The information in this directory was obtained in April of 2020, and updated in March 2022, but changes occur frequently.  Please contact an organization to verify that you have the most recent information before traveling to their location.<button id='splash-button'>Click to continue...</button></div>
       `,
       'es': `
-        <div>La información de este directorio fue obtenida en abril del 2020, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<button id='splash-button'>Haz click para continuar...</button></div>
+        <div>La información de este directorio fue obtenida en abril del 2020, y actualizado en marzo 2022, pero hay cambios frecuentes.  Por favor contacte directamente a cada organización para obtener/verificar que la información sea la más actualizada.<button id='splash-button'>Haz click para continuar...</button></div>
       `
     },
     'search-text': {

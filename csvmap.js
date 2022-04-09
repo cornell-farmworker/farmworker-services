@@ -669,9 +669,16 @@ function showResults (q, results, showid) {
   const resultsDiv = document.getElementById('results')
   resultsDiv.innerHTML = ''
 
+  if (results.length === 0) {
+    // no results found
+    const msg = csvmap.i18n['no-results'][csvmap.lang]
+    resultsDiv.innerHTML = '<div>' + msg + '</div>'
+    return
+  }
+
   if (csvmap.location) {
-    const nearest = csvmap.i18n.nearest[csvmap.lang]
-    resultsDiv.innerHTML = '<div>' + nearest + '</div>'
+    const msg = csvmap.i18n.nearest[csvmap.lang]
+    resultsDiv.innerHTML = '<div>' + msg + '</div>'
     if (csvmap.mobile()) {
       const viewmap = csvmap.i18n['view-map'][csvmap.lang]
       resultsDiv.innerHTML += '<a onclick="viewMap()">' + viewmap + '</a>'

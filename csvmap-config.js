@@ -103,6 +103,10 @@ let csvmap = {
       'en': 'home',
       'es': 'inicio'
     },
+    'no-results': {
+      'en': 'No results for your search',
+      'es': 'Ningún resultados para su busqueda'
+    },
     'results-button': {
       'en': 'return to search results',
       'es': 'volver a los resultados de la búsqueda'

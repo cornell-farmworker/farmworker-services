@@ -76,6 +76,7 @@ const customLayer = L.geoJson(null, {
 
       // make sure url fields start with http
       if (csvmap.config.linked_fields.indexOf(p) > -1) {
+        // only if not an e-mail address, and http/https/ftp is not already there
         if (v.length > 0 && !v.match(/@/) && !v.match(/^(https?|ftp):\/\//)) {
           v = 'http://' + v
           feature.properties[p] = v
@@ -619,8 +620,8 @@ function search (q) {
     })
   }
 
-  // replace slashes with space
-  q = q.replace(/\//g, '.')
+  // replace non-word characters with space
+  q = q.replace(/\W+/g, '.')
 
   // create regexp for each term in the query
   const qterms = q.split(' ')

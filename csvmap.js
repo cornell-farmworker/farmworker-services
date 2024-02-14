@@ -621,7 +621,8 @@ function search (q) {
   }
 
   // replace non-word characters with space
-  q = q.replace(/\W+/g, '.')
+  q = q.replace(/\W+/g, ' ')
+  console.log(q)
 
   // create regexp for each term in the query
   const qterms = q.split(' ')

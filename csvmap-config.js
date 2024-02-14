@@ -31,6 +31,7 @@ let csvmap = {
     lat_field: 'latitude',
     multivalue_fields: ['category-en', 'category-es', 'subcategory-en', 'subcategory-es', 'email', 'website-en', 'website-es', 'hours-en', 'hours-es'],
 
+    // linked fields will appear as links
     // all linked_fields should also be listed in multivalue_fields above
     linked_fields: ['email', 'website-en', 'website-es'],
 
@@ -71,6 +72,7 @@ let csvmap = {
       <h2>{{organization}}</h2>
       <dl>
         {{#website-es}}<dt>Sitio web</dt><dd>{{{website-es}}}</dd>{{/website-es}}
+        {{^website-es}}{{#website-en}}<dt>Website</dt><dd>{{{website-en}}}</dd>{{/website-en}}{{/website-es}}
         {{#address}}
         <dt>Dirección</dt>
         <dd>{{address}},

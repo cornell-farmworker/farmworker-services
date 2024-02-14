@@ -767,7 +767,8 @@ function showResults (q, results, showid) {
   }
   // on non-mobile, automatically show details if there is only one match
   if (!csvmap.mobile() && resultsList.childNodes.length === 1) {
-    showItem(lastMatch)
+    // this will append the record id to the URL
+    document.querySelector("#results ul li a").click()
   }
 
   // pad the bounds by 10% so that points aren't right on the edge of the map

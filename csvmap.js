@@ -19,7 +19,7 @@ document.onkeyup = function (e) {
 navigator.geolocation.getCurrentPosition(gotLocation, gotLocationError, { enableHighAccuracy: false })
 
 function gotLocation (result) {
-  console.log('Got Location')
+  //console.log('Got Location')
   csvmap.location = result.coords
 }
 function gotLocationError (result) {
@@ -184,7 +184,7 @@ function loadPoints () {
       document.getElementById('loading').remove()
     })
     .on('error', function () {
-      console.log('error parsing ' + csvmap.config.data_file)
+      console.log('error parsing ' + csvmap.config.data_file + '\n--make sure each row has longitude/latitude coordinates')
     })
     .addTo(map)
 }
@@ -622,7 +622,7 @@ function search (q) {
 
   // replace non-word characters with space
   q = q.replace(/\W+/g, ' ')
-  console.log(q)
+  //console.log(q)
 
   // create regexp for each term in the query
   const qterms = q.split(' ')

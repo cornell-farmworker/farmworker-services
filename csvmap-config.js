@@ -20,10 +20,10 @@ let csvmap = {
   config: {
     title: 'Farmworker Service Directory',
 
-    // categories_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1927915399&single=true&output=csv',
+    // categories_file: 'https://docs.google.com/spreadsheets/d/1KJyMT4qq5FTVh4kpHVz3eXegPYefD4VqI-70AInZzgs/edit?gid=603400615#gid=603400615',
     categories_file: 'data/categories.csv',
 
-    // data_file: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMOxMk_hNgG6xZjvCfMYBhXZRGTSfEw6MDjuNLU1MsginC8ZtGlQQrUPDHeS8PvoAJv6xJVQQNx4He/pub?gid=1785004179&single=true&output=csv',
+    // data_file: 'https://docs.google.com/spreadsheets/d/1KJyMT4qq5FTVh4kpHVz3eXegPYefD4VqI-70AInZzgs/edit?gid=1179635513#gid=1179635513',
     data_file: 'data/services.csv',
 
     name_field: 'organization',

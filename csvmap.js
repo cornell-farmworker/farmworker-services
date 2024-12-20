@@ -16,11 +16,14 @@ document.onkeyup = function (e) {
 }
 
 // Try to get user location
-navigator.geolocation.getCurrentPosition(gotLocation, gotLocationError, { enableHighAccuracy: false })
+function getLocation () {
+  navigator.geolocation.getCurrentPosition(gotLocation, gotLocationError, { enableHighAccuracy: false })
+}
 
 function gotLocation (result) {
   //console.log('Got Location')
   csvmap.location = result.coords
+  document.getElementById('search-button').click()
 }
 function gotLocationError (result) {
   console.log('Error getting location:')
@@ -678,6 +681,7 @@ function showResults (q, results, showid) {
     return
   }
 
+  // if we have user location, show closest result
   if (csvmap.location) {
     const msg = csvmap.i18n.nearest[csvmap.lang]
     resultsDiv.innerHTML = '<div>' + msg + '</div>'
@@ -685,6 +689,17 @@ function showResults (q, results, showid) {
       const viewmap = csvmap.i18n['view-map'][csvmap.lang]
       resultsDiv.innerHTML += '<a onclick="viewMap()">' + viewmap + '</a>'
     }
+  }
+  // show option to sort by location
+  else {
+    let b = document.createElement('button')
+    b.classList.add('sort-button')
+    b.dataset.i18n = 'sort-button'
+    b.innerText = csvmap.i18n['sort-button'][csvmap.lang]
+    b.addEventListener('click', function(e) {
+      getLocation()
+    })
+    resultsDiv.append(b)
   }
 
   const resultsList = document.createElement('ul')

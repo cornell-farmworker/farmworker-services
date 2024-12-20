@@ -156,6 +156,10 @@ let csvmap = {
     'miles': {
       'en': 'miles away',
       'es': 'millas'
+    },
+    'sort-button': {
+      'en': 'sort by my location',
+      'es': 'ordenar por mi ubicación'
     }
   }
 }
